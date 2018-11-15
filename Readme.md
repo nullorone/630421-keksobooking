@@ -1,7 +1,8 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Yaroslav Sveshnikov](https://up.htmlacademy.ru/javascript/16/user/630421).
-* Наставник: `Неизвестно`.
+* Наставник: [Владимир Коршунов](https://up.htmlacademy.ru/javascript/16/user/83596).
+
 
 ---
 
