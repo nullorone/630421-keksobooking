@@ -51,12 +51,7 @@ var getRandomInt = function (min, max) {
 
 // Находим случайную длину массива преимуществ
 var getRandomFeatures = function (features) {
-  var featureNumber = getRandomInt(1, features.length);
-  var randomFeatures = [];
-  for (var j = 0; j < featureNumber; j++) {
-    randomFeatures.push(features[j]);
-  }
-  return randomFeatures;
+  return features.slice(0, getRandomInt(1, features.length));
 };
 
 // Перемешиваем порядок элементов в массиве
