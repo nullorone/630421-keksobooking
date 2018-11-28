@@ -1,15 +1,57 @@
 'use strict';
 
+var LEFT_SIDE_VIEWPORT = 20; // Минимальное положение пина от левого края вьюпорта с учетом ширины пина
+var RIGHT_SIDE_VIEWPORT = 1180; // Минимальное положение пина от правого края вьюпорта с учетом ширины пина
+var TOP_SIDE_VIEWPORT = 130; // Минимальное положение пина от верхнего края вьюпорта с учетом высоты пина
+var BOTTOM_SIDE_VIEWPORT = 630; // Минимальное положение пина от нижнего края вьюпорта с учетом высоты пина
+var MAX_ADS = 8; // Максимальное количество объявлений для генерации массива объектов
+var MIN_PRICE_HOUSING = 1000;
+var MAX_PRICE_HOUSING = 1000000;
+var MIN_ROOMS_HOUSING = 1;
+var MAX_ROOMS_HOUSING = 5;
+var MIN_GUESTS = 1;
+var MAX_GUESTS = 10;
+
+var AD_TITLES = [
+  'Большая уютная квартира',
+  'Маленькая неуютная квартира',
+  'Огромный прекрасный дворец',
+  'Маленький ужасный дворец',
+  'Красивый гостевой домик',
+  'Некрасивый негостеприимный домик',
+  'Уютное бунгало далеко от моря',
+  'Неуютное бунгало по колено в воде'
+];
+
+var TYPES_HOUSING = ['palace', 'flat', 'house', 'bungalo'];
+
+var TIMES_CHECK = ['12:00', '13:00', '14:00'];
+
+var FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
+];
+
+var PHOTOS_HOSTEL = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+];
+
 // Находим случайно число в указанных диапазонах
-var getRandomValue = function (min, max) {
-  var randomInteger = Math.random() * (max + 1 - min) + min;
+var getRandomInt = function (min, max) {
+  var randomInteger = Math.random() * (max - min) + min;
   randomInteger = Math.floor(randomInteger);
   return randomInteger;
 };
 
 // Находим случайную длину массива преимуществ
 var getRandomFeatures = function (features) {
-  var featureNumber = getRandomValue(1, features.length - 1);
+  var featureNumber = getRandomInt(1, features.length);
   var randomFeatures = [];
   for (var j = 0; j < featureNumber; j++) {
     randomFeatures.push(features[j]);
@@ -18,97 +60,98 @@ var getRandomFeatures = function (features) {
 };
 
 // Перемешиваем порядок элементов в массиве
-var getSortArr = function (arr) {
-  for (var i = arr.length - 1; i > 0; i--) {
+var getShuffleArray = function (array) {
+  for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
-    var temp = arr[j];
-    arr[j] = arr[i];
-    arr[i] = temp;
+    var temp = array[j];
+    array[j] = array[i];
+    array[i] = temp;
   }
-  return arr;
+  return array;
 };
 
-// Генерация массива объектов с описанием карточек жилья
-var getAds = function (
-    avatarNumbers,
-    titles,
-    typesHousing,
-    timesCheck,
-    features,
-    photosHotel
-) {
+// Получаем позицию по-горизонтали
+var getLocationHousingX = function (left, right) {
+  return getRandomInt(left, right);
+};
+
+// Получаем позицию по-вертикали
+var getLocationHousingY = function (top, bottom) {
+  return getRandomInt(top, bottom);
+};
+
+// Получаем рандомный прайс за жилье
+var getRandomPrice = function (lowPrice, highPrice) {
+  return getRandomInt(lowPrice, highPrice);
+};
+
+// Получаем рандомный тип жилья
+var getTypeHousing = function () {
+  return TYPES_HOUSING[getRandomInt(0, TYPES_HOUSING.length)];
+};
+
+// Получаем рандомное количество комнат из заданного диапазона
+var getRandomRoomsNumber = function () {
+  return getRandomInt(MIN_ROOMS_HOUSING, MAX_ROOMS_HOUSING);
+};
+
+// Получаем рандомное количество гостей из заданного диапазона
+var getRandomGuestsNumber = function (minGuests, maxGuests) {
+  return getRandomInt(minGuests, maxGuests);
+};
+
+// Получаем произвольное значение времени из массива
+var getTimeCheckins = function () {
+  return TIMES_CHECK[getRandomInt(0, TIMES_CHECK.length)];
+};
+
+// Генерация шаблона объявления
+var generateAd = function (i) {
+  var ad = {
+    author: {
+      avatar: 'img/avatars/user0' + (i + 1) + '.png'
+    },
+    offer: {
+      title: AD_TITLES[i],
+      address: getLocationHousingX(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT) + ' - ' + getLocationHousingY(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT),
+      price: getRandomPrice(MIN_PRICE_HOUSING, MAX_PRICE_HOUSING),
+      type: getTypeHousing(),
+      rooms: getRandomRoomsNumber(),
+      guests: getRandomGuestsNumber(MIN_GUESTS, MAX_GUESTS),
+      checkin: getTimeCheckins(),
+      checkout: getTimeCheckins(),
+      features: getRandomFeatures(FEATURES),
+      description: '',
+      photos: getShuffleArray(PHOTOS_HOSTEL)
+    },
+    location: {
+      x: getLocationHousingX(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT),
+      y: getLocationHousingY(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT)
+    }
+  };
+  return ad;
+};
+
+// Генерация массива объектов карточек жилья
+var generateAds = function () {
   var ads = [];
-  var LEFT_SIDE_VIEWPORT = 20; // Минимальное положение пина от левого края вьюпорта с учетом ширины пина
-  var RIGHT_SIDE_VIEWPORT = 1180; // Минимальное положение пина от правого края вьюпорта с учетом ширины пина
-  var TOP_SIDE_VIEWPORT = 130; // Минимальное положение пина от верхнего края вьюпорта с учетом высоты пина
-  var BOTTOM_SIDE_VIEWPORT = 630; // Минимальное положение пина от нижнего края вьюпорта с учетом высоты пина
-  var LOCATION_HOUSING_X = getRandomValue(
-      LEFT_SIDE_VIEWPORT,
-      RIGHT_SIDE_VIEWPORT
-  );
-  var LOCATION_HOUSING_Y = getRandomValue(
-      TOP_SIDE_VIEWPORT,
-      BOTTOM_SIDE_VIEWPORT
-  );
-  for (var i = 0; i < 8; i++) {
-    var adTemplate = {
-      'author': {
-        'avatar': 'img/avatars/user0' + avatarNumbers[i] + '.png'
-      },
-      'offer': {
-        'title': titles[i],
-        'address': LOCATION_HOUSING_X + ' - ' + LOCATION_HOUSING_Y,
-        'price': getRandomValue(1000, 1000000),
-        'type': typesHousing[getRandomValue(0, 3)],
-        'rooms': getRandomValue(1, 5),
-        'guests': getRandomValue(1, 10),
-        'checkin': timesCheck[getRandomValue(0, 2)],
-        'checkout': timesCheck[getRandomValue(0, 2)],
-        'features': getRandomFeatures(features),
-        'description': '',
-        'photos': getSortArr(photosHotel)
-      },
-      'location': {
-        'x': LOCATION_HOUSING_X,
-        'y': LOCATION_HOUSING_Y
-      }
-    };
-    ads.push(adTemplate);
+  for (var i = 0; i < MAX_ADS; i++) {
+    ads.push(generateAd(i));
   }
   return ads;
 };
 
-// Записываем в переменную массив с объектами из функции getAds
-var adsData = getAds(
-    [1, 2, 3, 4, 5, 6, 7, 8], // avatarNumber
-    [
-      'Большая уютная квартира',
-      'Маленькая неуютная квартира',
-      'Огромный прекрасный дворец',
-      'Маленький ужасный дворец',
-      'Красивый гостевой домик',
-      'Некрасивый негостеприимный домик',
-      'Уютное бунгало далеко от моря',
-      'Неуютное бунгало по колено в воде'
-    ], // titles
-    ['palace', 'flat', 'house', 'bungalo'], // typesHousing
-    ['12:00', '13:00', '14:00'], // timesCheck
-    ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'], // features
-    [
-      'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-      'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-      'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-    ] // photosHotel
-);
+// Записываем в переменную массив с объектами из функции generateAds
+var adsData = generateAds(generateAd());
 
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
 // Генерация меток
-var getSimilarPins = function () {
+var getSimilarPins = function (ads) {
   var fragment = document.createDocumentFragment();
   var mapPins = document.querySelector('.map__pins');
-  for (var i = 0; i < adsData.length; i++) {
+  for (var i = 0; i < ads.length; i++) {
     var pinTemplate = document.querySelector('#pin').content.cloneNode(true);
     pinTemplate.querySelector('.map__pin').style.left =
       adsData[i].location.x + 'px';
@@ -121,7 +164,7 @@ var getSimilarPins = function () {
   return mapPins.appendChild(fragment);
 };
 
-getSimilarPins(); // Отрисовка пинов на карте
+getSimilarPins(generateAds()); // Отрисовка пинов на карте
 
 var getCardHousing = function (indexCard) {
   var fragment = document.createDocumentFragment();
