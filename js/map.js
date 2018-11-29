@@ -66,7 +66,7 @@ var getShuffleArray = function (array) {
     array[j] = array[i];
     array[i] = temp;
   }
-  return array.slice(0);
+  return array.slice();
 };
 
 
