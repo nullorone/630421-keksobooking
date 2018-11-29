@@ -166,7 +166,7 @@ var getSimilarPins = function () {
   var fragment = document.createDocumentFragment();
   var mapPins = document.querySelector('.map__pins');
   for (var i = 0; i < MAX_ADS; i++) {
-    fragment.appendChild(creatingPin(generateAd(i)));
+    fragment.appendChild(creatingPin(ads[i]));
   }
   return mapPins.appendChild(fragment);
 };
