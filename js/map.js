@@ -12,9 +12,9 @@ var MAX_ROOMS_HOUSING = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
 var INDEX_CARD = 2;
-var CARD_HOUSING_ELEMENT = document.querySelector('#card').content.cloneNode(true);
-var MAP = document.querySelector('.map');
-var ADS_FILTER = document.querySelector('.map__filters-container');
+var cardHousingElement = document.querySelector('#card').content.cloneNode(true);
+var map = document.querySelector('.map');
+var adsFilter = document.querySelector('.map__filters-container');
 
 var AD_TITLES = [
   'Большая уютная квартира',
@@ -112,8 +112,7 @@ var generateAd = function (i) {
     },
     offer: {
       title: AD_TITLES[i],
-      address:
-        getLocationHousingX(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT) +
+      address: getLocationHousingX(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT) +
         ' - ' +
         getLocationHousingY(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT),
       price: getRandomPrice(MIN_PRICE_HOUSING, MAX_PRICE_HOUSING),
@@ -145,7 +144,7 @@ var generateAds = function () {
 
 // Показывает карту с объявлениями
 var showMap = function () {
-  MAP.classList.remove('map--faded');
+  map.classList.remove('map--faded');
 };
 
 // Скрывает превью карты
@@ -190,10 +189,10 @@ var getRussianTypeHousing = function (type) {
 var generateFeaturesList = function (ads, featuresList) {
   for (var i = ads[INDEX_CARD].offer.features.length - 1; i >= 0; i--) {
     featuresList.insertAdjacentHTML(
-        'afterbegin',
-        '<li class="popup__feature popup__feature--' +
-        ads[INDEX_CARD].offer.features[i] +
-        '"></li>'
+      'afterbegin',
+      '<li class="popup__feature popup__feature--' +
+      ads[INDEX_CARD].offer.features[i] +
+      '"></li>'
     );
   }
   return featuresList;
@@ -203,10 +202,10 @@ var generateFeaturesList = function (ads, featuresList) {
 var getPhotosItems = function (ads, popupPhotos) {
   for (var i = ads[INDEX_CARD].offer.photos.length - 1; i >= 0; i--) {
     popupPhotos.insertAdjacentHTML(
-        'afterbegin',
-        '<img src="' +
-        ads[INDEX_CARD].offer.photos[i] +
-        '" class="popup__photo" width="45" height="40" alt="Фотография жилья">'
+      'afterbegin',
+      '<img src="' +
+      ads[INDEX_CARD].offer.photos[i] +
+      '" class="popup__photo" width="45" height="40" alt="Фотография жилья">'
     );
   }
   return popupPhotos;
@@ -214,46 +213,46 @@ var getPhotosItems = function (ads, popupPhotos) {
 
 // Создает карточку с информацией о жилье
 var creatingCardHousing = function (ads) {
-  CARD_HOUSING_ELEMENT.querySelector('.popup__avatar').src =
+  cardHousingElement.querySelector('.popup__avatar').src =
     ads[INDEX_CARD].author.avatar;
-  CARD_HOUSING_ELEMENT.querySelector('.popup__title').textContent =
+  cardHousingElement.querySelector('.popup__title').textContent =
     ads[INDEX_CARD].offer.title;
-  CARD_HOUSING_ELEMENT.querySelector('.popup__text--address').textContent =
+  cardHousingElement.querySelector('.popup__text--address').textContent =
     ads[INDEX_CARD].offer.address + ' Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3';
-  CARD_HOUSING_ELEMENT.querySelector('.popup__text--price').innerHTML =
+  cardHousingElement.querySelector('.popup__text--price').innerHTML =
     '&#x20bd;<span>/ночь</span>';
-  CARD_HOUSING_ELEMENT
+  cardHousingElement
     .querySelector('.popup__text--price')
     .insertAdjacentText('afterbegin', ads[INDEX_CARD].offer.price);
-  CARD_HOUSING_ELEMENT.querySelector(
-      '.popup__type'
+  cardHousingElement.querySelector(
+    '.popup__type'
   ).textContent = getRussianTypeHousing(ads[INDEX_CARD].offer.type);
-  CARD_HOUSING_ELEMENT.querySelector('.popup__text--capacity').textContent =
+  cardHousingElement.querySelector('.popup__text--capacity').textContent =
     ads[INDEX_CARD].offer.rooms +
     ' комнаты для ' +
     ads[INDEX_CARD].offer.guests +
     ' гостей';
-  CARD_HOUSING_ELEMENT.querySelector('.popup__text--time').textContent =
+  cardHousingElement.querySelector('.popup__text--time').textContent =
     'Заезд после ' +
     ads[INDEX_CARD].offer.checkin +
     ', выезд до ' +
     ads[INDEX_CARD].offer.checkout;
-  var popupFeatures = CARD_HOUSING_ELEMENT.querySelector('.popup__features');
+  var popupFeatures = cardHousingElement.querySelector('.popup__features');
   popupFeatures.innerHTML = ' ';
   generateFeaturesList(ads, popupFeatures);
-  CARD_HOUSING_ELEMENT.querySelector('.popup__description').textContent =
+  cardHousingElement.querySelector('.popup__description').textContent =
     ads[INDEX_CARD].offer.description;
-  var popupPhotos = CARD_HOUSING_ELEMENT.querySelector('.popup__photos');
+  var popupPhotos = cardHousingElement.querySelector('.popup__photos');
   popupPhotos.innerHTML = ' ';
   getPhotosItems(ads, popupPhotos);
-  return CARD_HOUSING_ELEMENT;
+  return cardHousingElement;
 };
 
 // Вставляет карточку объявления перед элементом фильтрации объявлений
 var showCardHousing = function (card) {
-  return MAP.insertBefore(
-      card,
-      ADS_FILTER);
+  return map.insertBefore(
+    card,
+    adsFilter);
 };
 
 // Рендерит карточку объявления
