@@ -138,6 +138,9 @@ var generateAds = function () {
   return ads;
 };
 
+// Присваиваем переменной генерацию массива объектов с объявлениями
+var ads = generateAds();
+
 // Показывает карту с объявлениями
 var showMap = function () {
   map.classList.remove('map--faded');
