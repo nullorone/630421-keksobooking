@@ -69,10 +69,8 @@ var getShuffleArray = function (array) {
   return array;
 };
 
-// Получаем позицию по-горизонтали
-var getLocationHousingX = function (left, right) {
-  return getRandomInt(left, right);
-};
+// Позиция по-горизонтали
+var locationHousingX = getRandomInt(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT);
 
 // Получаем позицию по-вертикали
 var getLocationHousingY = function (top, bottom) {
@@ -112,7 +110,7 @@ var generateAd = function (i) {
     },
     offer: {
       title: AD_TITLES[i],
-      address: getLocationHousingX(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT) +
+      address: locationHousingX +
         ' - ' +
         getLocationHousingY(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT),
       price: getRandomPrice(MIN_PRICE_HOUSING, MAX_PRICE_HOUSING),
@@ -126,7 +124,7 @@ var generateAd = function (i) {
       photos: getShuffleArray(PHOTOS_HOSTEL)
     },
     location: {
-      x: getLocationHousingX(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT),
+      x: locationHousingX,
       y: getLocationHousingY(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT)
     }
   };
