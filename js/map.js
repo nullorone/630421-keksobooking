@@ -257,4 +257,4 @@ var showCardHousing = function (card) {
 };
 
 // Рендерит карточку объявления
-showCardHousing(creatingCardHousing(generateAd(INDEX_CARD)));
+showCardHousing(creatingCardHousing(ads[INDEX_CARD]));
