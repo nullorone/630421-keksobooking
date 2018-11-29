@@ -184,12 +184,12 @@ var getRussianTypeHousing = function (type) {
 };
 
 // Генерирует список преимуществ жилья
-var generateFeaturesList = function (ads, featuresList) {
-  for (var i = ads[INDEX_CARD].offer.features.length - 1; i >= 0; i--) {
+var generateFeaturesList = function (ad, featuresList) {
+  for (var i = ad.offer.features.length - 1; i >= 0; i--) {
     featuresList.insertAdjacentHTML(
       'afterbegin',
       '<li class="popup__feature popup__feature--' +
-      ads[INDEX_CARD].offer.features[i] +
+      ad.offer.features[i] +
       '"></li>'
     );
   }
@@ -197,12 +197,12 @@ var generateFeaturesList = function (ads, featuresList) {
 };
 
 // Получает фотографии жилья
-var getPhotosItems = function (ads, popupPhotos) {
-  for (var i = ads[INDEX_CARD].offer.photos.length - 1; i >= 0; i--) {
+var getPhotosItems = function (ad, popupPhotos) {
+  for (var i = ad.offer.photos.length - 1; i >= 0; i--) {
     popupPhotos.insertAdjacentHTML(
       'afterbegin',
       '<img src="' +
-      ads[INDEX_CARD].offer.photos[i] +
+      ad.offer.photos[i] +
       '" class="popup__photo" width="45" height="40" alt="Фотография жилья">'
     );
   }
@@ -210,39 +210,39 @@ var getPhotosItems = function (ads, popupPhotos) {
 };
 
 // Создает карточку с информацией о жилье
-var creatingCardHousing = function (ads) {
+var creatingCardHousing = function (ad) {
   cardHousingElement.querySelector('.popup__avatar').src =
-    ads[INDEX_CARD].author.avatar;
+    ad.author.avatar;
   cardHousingElement.querySelector('.popup__title').textContent =
-    ads[INDEX_CARD].offer.title;
+    ad.offer.title;
   cardHousingElement.querySelector('.popup__text--address').textContent =
-    ads[INDEX_CARD].offer.address;
+    ad.offer.address;
   cardHousingElement.querySelector('.popup__text--price').innerHTML =
     '&#x20bd;<span>/ночь</span>';
   cardHousingElement
     .querySelector('.popup__text--price')
-    .insertAdjacentText('afterbegin', ads[INDEX_CARD].offer.price);
+    .insertAdjacentText('afterbegin', ad.offer.price);
   cardHousingElement.querySelector(
     '.popup__type'
-  ).textContent = getRussianTypeHousing(ads[INDEX_CARD].offer.type);
+  ).textContent = getRussianTypeHousing(ad.offer.type);
   cardHousingElement.querySelector('.popup__text--capacity').textContent =
-    ads[INDEX_CARD].offer.rooms +
+    ad.offer.rooms +
     ' комнаты для ' +
-    ads[INDEX_CARD].offer.guests +
+    ad.offer.guests +
     ' гостей';
   cardHousingElement.querySelector('.popup__text--time').textContent =
     'Заезд после ' +
-    ads[INDEX_CARD].offer.checkin +
+    ad.offer.checkin +
     ', выезд до ' +
-    ads[INDEX_CARD].offer.checkout;
+    ad.offer.checkout;
   var popupFeatures = cardHousingElement.querySelector('.popup__features');
   popupFeatures.innerHTML = ' ';
-  generateFeaturesList(ads, popupFeatures);
+  generateFeaturesList(ad, popupFeatures);
   cardHousingElement.querySelector('.popup__description').textContent =
-    ads[INDEX_CARD].offer.description;
+    ad.offer.description;
   var popupPhotos = cardHousingElement.querySelector('.popup__photos');
   popupPhotos.innerHTML = ' ';
-  getPhotosItems(ads, popupPhotos);
+  getPhotosItems(ad, popupPhotos);
   return cardHousingElement;
 };
 
@@ -254,4 +254,4 @@ var showCardHousing = function (card) {
 };
 
 // Рендерит карточку объявления
-showCardHousing(creatingCardHousing(generateAds()));
+showCardHousing(creatingCardHousing(generateAd(INDEX_CARD)));
