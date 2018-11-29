@@ -73,9 +73,7 @@ var getShuffleArray = function (array) {
 var locationHousingX = getRandomInt(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT);
 
 // Получаем позицию по-вертикали
-var getLocationHousingY = function (top, bottom) {
-  return getRandomInt(top, bottom);
-};
+var locationHousingY = getRandomInt(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT);
 
 // Получаем рандомный прайс за жилье
 var getRandomPrice = function (lowPrice, highPrice) {
@@ -112,7 +110,7 @@ var generateAd = function (i) {
       title: AD_TITLES[i],
       address: locationHousingX +
         ' - ' +
-        getLocationHousingY(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT),
+        locationHousingY,
       price: getRandomPrice(MIN_PRICE_HOUSING, MAX_PRICE_HOUSING),
       type: getTypeHousing(),
       rooms: getRandomRoomsNumber(),
@@ -125,7 +123,7 @@ var generateAd = function (i) {
     },
     location: {
       x: locationHousingX,
-      y: getLocationHousingY(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT)
+      y: locationHousingY
     }
   };
   return ad;
