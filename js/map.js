@@ -149,8 +149,10 @@ showMap();
 // Создает пин
 var creatingPin = function (ad) {
   var pinTemplate = document.querySelector('#pin').content.cloneNode(true);
-  pinTemplate.querySelector('.map__pin').style.left = ad.location.x + 'px';
-  pinTemplate.querySelector('.map__pin').style.top = ad.location.y + 'px';
+  var widthMapPin = pinTemplate.querySelector('.map__pin:not(.map__pin--main)').offsetWidth;
+  var heightMapPin = pinTemplate.querySelector('.map__pin:not(.map__pin--main)').offsetHeight;
+  pinTemplate.querySelector('.map__pin').style.left = (ad.location.x - widthMapPin / 2) + 'px';
+  pinTemplate.querySelector('.map__pin').style.top = (ad.location.y - heightMapPin) + 'px';
   pinTemplate.querySelector('img').src = ad.author.avatar;
   pinTemplate.querySelector('img').alt = ad.offer.title;
   return pinTemplate;
