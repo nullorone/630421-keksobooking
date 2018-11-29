@@ -176,13 +176,17 @@ getSimilarPins();
 
 // Получает перевод английского названия типа жилья
 var getRussianTypeHousing = function (type) {
-  var englishTypesHousing = ['flat', 'bungalo', 'house', 'palace'];
-  var russianTypesHousing = ['Квартира', 'Бунгало', 'Дом', 'Дворец'];
-  for (var i = 0; i < englishTypesHousing.length; i++) {
-    if (type === englishTypesHousing[i]) {
-      return russianTypesHousing[i];
+  var typesHousing = {
+    'flat': 'Квартира',
+    'bungalo': 'Бунгало',
+    'house': 'Дом',
+    'palace': 'Дворец'
+  };
+  for (var typeItem in typesHousing) {
+    if (type === typeItem) {
+      return typesHousing[typeItem];
     }
-  }
+  };
   return type;
 };
 
