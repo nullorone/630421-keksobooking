@@ -109,7 +109,7 @@ var generateAd = function (i) {
     offer: {
       title: AD_TITLES[i],
       address: locationHousingX +
-        ' - ' +
+        ', ' +
         locationHousingY,
       price: getRandomPrice(MIN_PRICE_HOUSING, MAX_PRICE_HOUSING),
       type: getTypeHousing(),
@@ -216,7 +216,7 @@ var creatingCardHousing = function (ads) {
   cardHousingElement.querySelector('.popup__title').textContent =
     ads[INDEX_CARD].offer.title;
   cardHousingElement.querySelector('.popup__text--address').textContent =
-    ads[INDEX_CARD].offer.address + ' Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3';
+    ads[INDEX_CARD].offer.address;
   cardHousingElement.querySelector('.popup__text--price').innerHTML =
     '&#x20bd;<span>/ночь</span>';
   cardHousingElement
