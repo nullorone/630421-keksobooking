@@ -187,19 +187,14 @@ var getRussianTypeHousing = function (type) {
     if (type === typeItem) {
       return typesHousing[typeItem];
     }
-  };
+  }
   return type;
 };
 
 // Генерирует список преимуществ жилья
 var generateFeaturesList = function (ad, featuresList) {
   for (var i = ad.offer.features.length - 1; i >= 0; i--) {
-    featuresList.insertAdjacentHTML(
-      'afterbegin',
-      '<li class="popup__feature popup__feature--' +
-      ad.offer.features[i] +
-      '"></li>'
-    );
+    featuresList.insertAdjacentHTML('afterbegin', '<li class="popup__feature popup__feature--' + ad.offer.features[i] + '"></li>');
   }
   return featuresList;
 };
@@ -207,12 +202,7 @@ var generateFeaturesList = function (ad, featuresList) {
 // Получает фотографии жилья
 var getPhotosItems = function (ad, popupPhotos) {
   for (var i = ad.offer.photos.length - 1; i >= 0; i--) {
-    popupPhotos.insertAdjacentHTML(
-      'afterbegin',
-      '<img src="' +
-      ad.offer.photos[i] +
-      '" class="popup__photo" width="45" height="40" alt="Фотография жилья">'
-    );
+    popupPhotos.insertAdjacentHTML('afterbegin', '<img src="' + ad.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
   }
   return popupPhotos;
 };
@@ -230,9 +220,7 @@ var creatingCardHousing = function (ad) {
   cardHousingElement
     .querySelector('.popup__text--price')
     .insertAdjacentText('afterbegin', ad.offer.price);
-  cardHousingElement.querySelector(
-    '.popup__type'
-  ).textContent = getRussianTypeHousing(ad.offer.type);
+  cardHousingElement.querySelector('.popup__type').textContent = getRussianTypeHousing(ad.offer.type);
   cardHousingElement.querySelector('.popup__text--capacity').textContent =
     ad.offer.rooms +
     ' комнаты для ' +
@@ -256,9 +244,7 @@ var creatingCardHousing = function (ad) {
 
 // Вставляет карточку объявления перед элементом фильтрации объявлений
 var showCardHousing = function (card) {
-  return map.insertBefore(
-    card,
-    adsFilter);
+  return map.insertBefore(card, adsFilter);
 };
 
 // Рендерит карточку объявления
