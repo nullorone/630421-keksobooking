@@ -69,11 +69,6 @@ var getShuffleArray = function (array) {
   return array;
 };
 
-// Позиция по-горизонтали
-var locationHousingX = getRandomInt(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT);
-
-// Получаем позицию по-вертикали
-var locationHousingY = getRandomInt(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT);
 
 // Получаем рандомный прайс за жилье
 var getRandomPrice = function (lowPrice, highPrice) {
@@ -102,6 +97,12 @@ var getTimeCheckins = function () {
 
 // Генерация шаблона объявления
 var generateAd = function (i) {
+  // Позиция по-горизонтали
+  var locationHousingX = getRandomInt(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT);
+
+  // Получаем позицию по-вертикали
+  var locationHousingY = getRandomInt(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT);
+
   var ad = {
     author: {
       avatar: 'img/avatars/user0' + (i + 1) + '.png'
