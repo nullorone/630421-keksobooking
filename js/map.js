@@ -147,12 +147,12 @@ var showMap = function () {
 showMap();
 
 // Создает пин
-var creatingPin = function (ads, i) {
+var creatingPin = function (ad) {
   var pinTemplate = document.querySelector('#pin').content.cloneNode(true);
-  pinTemplate.querySelector('.map__pin').style.left = ads[i].location.x + 'px';
-  pinTemplate.querySelector('.map__pin').style.top = ads[i].location.y + 'px';
-  pinTemplate.querySelector('img').src = ads[i].author.avatar;
-  pinTemplate.querySelector('img').alt = ads[i].offer.title;
+  pinTemplate.querySelector('.map__pin').style.left = ad.location.x + 'px';
+  pinTemplate.querySelector('.map__pin').style.top = ad.location.y + 'px';
+  pinTemplate.querySelector('img').src = ad.author.avatar;
+  pinTemplate.querySelector('img').alt = ad.offer.title;
   return pinTemplate;
 };
 
@@ -161,7 +161,7 @@ var getSimilarPins = function () {
   var fragment = document.createDocumentFragment();
   var mapPins = document.querySelector('.map__pins');
   for (var i = 0; i < MAX_ADS; i++) {
-    fragment.appendChild(creatingPin(generateAds(), i));
+    fragment.appendChild(creatingPin(generateAd(i)));
   }
   return mapPins.appendChild(fragment);
 };
