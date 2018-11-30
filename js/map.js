@@ -43,10 +43,13 @@ var PHOTOS_HOSTEL = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var PIN_TEMPLATE = document.querySelector('#pin').content;
 
 var cardHousingElement = document.querySelector('#card').content.cloneNode(true);
 var map = document.querySelector('.map');
 var adsFilter = document.querySelector('.map__filters-container');
+var mapPin = PIN_TEMPLATE.querySelector('.map__pin');
+var mapPinImg = PIN_TEMPLATE.querySelector('img');
 
 // Находим случайно число в указанных диапазонах
 var getRandomInt = function (min, max) {
@@ -155,14 +158,14 @@ showMap();
 
 // Создает пин
 var creatingPin = function (ad) {
-  var pinTemplate = document.querySelector('#pin').content.cloneNode(true);
-  var widthMapPin = pinTemplate.querySelector('.map__pin:not(.map__pin--main)').offsetWidth;
-  var heightMapPin = pinTemplate.querySelector('.map__pin:not(.map__pin--main)').offsetHeight;
-  pinTemplate.querySelector('.map__pin').style.left = (ad.location.x - widthMapPin / 2) + 'px';
-  pinTemplate.querySelector('.map__pin').style.top = (ad.location.y - heightMapPin) + 'px';
-  pinTemplate.querySelector('img').src = ad.author.avatar;
-  pinTemplate.querySelector('img').alt = ad.offer.title;
-  return pinTemplate;
+  var template = PIN_TEMPLATE.cloneNode(true);
+  var widthMapPin = mapPin.offsetWidth;
+  var heightMapPin = mapPin.offsetHeight;
+  mapPin.style.left = (ad.location.x - widthMapPin / 2) + 'px';
+  mapPin.style.top = (ad.location.y - heightMapPin) + 'px';
+  mapPinImg.src = ad.author.avatar;
+  mapPinImg.alt = ad.offer.title;
+  return template;
 };
 
 // Генерация меток
