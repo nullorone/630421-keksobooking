@@ -53,8 +53,7 @@ var mapPinImg = PIN_TEMPLATE.querySelector('img');
 
 // Находим случайно число в указанных диапазонах
 var getRandomInt = function (min, max) {
-  var randomInteger = Math.random() * (max - min) + min;
-  randomInteger = Math.floor(randomInteger);
+  var randomInteger = Math.floor(Math.random() * (max - min) + min);
   return randomInteger;
 };
 
