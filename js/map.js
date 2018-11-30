@@ -12,9 +12,6 @@ var MAX_ROOMS_HOUSING = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
 var INDEX_CARD = 2;
-var cardHousingElement = document.querySelector('#card').content.cloneNode(true);
-var map = document.querySelector('.map');
-var adsFilter = document.querySelector('.map__filters-container');
 
 var AD_TITLES = [
   'Большая уютная квартира',
@@ -45,6 +42,11 @@ var PHOTOS_HOSTEL = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
+
+
+var cardHousingElement = document.querySelector('#card').content.cloneNode(true);
+var map = document.querySelector('.map');
+var adsFilter = document.querySelector('.map__filters-container');
 
 // Находим случайно число в указанных диапазонах
 var getRandomInt = function (min, max) {
