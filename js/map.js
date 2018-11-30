@@ -62,13 +62,14 @@ var getRandomFeatures = function (features) {
 
 // Перемешиваем порядок элементов в массиве
 var getShuffleArray = function (array) {
-  for (var i = array.length - 1; i > 0; i--) {
+  var cloneArray = array.slice();
+  for (var i = cloneArray.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
-    var temp = array[j];
-    array[j] = array[i];
-    array[i] = temp;
+    var temp = cloneArray[j];
+    cloneArray[j] = cloneArray[i];
+    cloneArray[i] = temp;
   }
-  return array.slice();
+  return cloneArray;
 };
 
 
