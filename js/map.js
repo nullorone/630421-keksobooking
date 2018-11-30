@@ -216,10 +216,7 @@ var creatingCardHousing = function (ad) {
   cardHousingElement.querySelector('.popup__text--address').textContent =
     ad.offer.address;
   cardHousingElement.querySelector('.popup__text--price').innerHTML =
-    '&#x20bd;<span>/ночь</span>';
-  cardHousingElement
-    .querySelector('.popup__text--price')
-    .insertAdjacentText('afterbegin', ad.offer.price);
+  ad.offer.price + '&#x20bd;<span>/ночь</span>';
   cardHousingElement.querySelector('.popup__type').textContent = getRussianTypeHousing(ad.offer.type);
   cardHousingElement.querySelector('.popup__text--capacity').textContent =
     ad.offer.rooms +
