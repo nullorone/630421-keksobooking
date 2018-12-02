@@ -48,8 +48,6 @@ var PIN_TEMPLATE = document.querySelector('#pin').content;
 var cardHousingElement = document.querySelector('#card').content.cloneNode(true);
 var map = document.querySelector('.map');
 var adsFilter = document.querySelector('.map__filters-container');
-var mapPin = PIN_TEMPLATE.querySelector('.map__pin');
-var mapPinImg = PIN_TEMPLATE.querySelector('img');
 
 // Находим случайно число в указанных диапазонах
 var getRandomInt = function (min, max) {
@@ -158,6 +156,8 @@ showMap();
 // Создает пин
 var creatingPin = function (ad) {
   var template = PIN_TEMPLATE.cloneNode(true);
+  var mapPin = template.querySelector('.map__pin');
+  var mapPinImg = template.querySelector('img');
   var widthMapPin = mapPin.offsetWidth;
   var heightMapPin = mapPin.offsetHeight;
   mapPin.style.left = (ad.location.x - widthMapPin / 2) + 'px';
