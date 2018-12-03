@@ -157,8 +157,8 @@ showMap();
 // Создает пин
 var creatingPin = function (ad) {
   var template = PIN_TEMPLATE.cloneNode(true);
-  var mapPin = template.querySelector('.map__pin');
-  var mapPinImg = template.querySelector('img');
+  var mapPin = template.children[0];
+  var mapPinImg = mapPin.children[0];
   var widthMapPin = mapPin.offsetWidth;
   var heightMapPin = mapPin.offsetHeight;
   mapPin.style.left = (ad.location.x - widthMapPin / 2) + 'px';
