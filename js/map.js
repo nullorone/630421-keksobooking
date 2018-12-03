@@ -174,7 +174,7 @@ var getSimilarPins = function () {
   for (var i = 0; i < MAX_ADS; i++) {
     fragment.appendChild(creatingPin(ads[i]));
   }
-  return mapPins.appendChild(fragment);
+  mapPins.appendChild(fragment);
 };
 
 // Отрисовка пинов на карте
