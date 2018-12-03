@@ -168,7 +168,7 @@ var creatingPin = function (ad) {
 };
 
 // Генерация меток
-var getSimilarPins = function () {
+var generateSimilarPins = function () {
   var fragment = document.createDocumentFragment();
   var mapPins = document.querySelector('.map__pins');
   for (var i = 0; i < MAX_ADS; i++) {
@@ -178,7 +178,7 @@ var getSimilarPins = function () {
 };
 
 // Отрисовка пинов на карте
-getSimilarPins();
+generateSimilarPins();
 
 // Получает перевод английского названия типа жилья
 var getRussianTypeHousing = function (type) {
