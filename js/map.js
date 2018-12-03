@@ -246,7 +246,7 @@ var creatingCardHousing = function (ad) {
 
 // Вставляет карточку объявления перед элементом фильтрации объявлений
 var showCardHousing = function (card) {
-  return map.insertBefore(card, adsFilter);
+  map.insertBefore(card, adsFilter);
 };
 
 // Рендерит карточку объявления
