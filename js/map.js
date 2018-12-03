@@ -47,6 +47,7 @@ var PIN_TEMPLATE = document.querySelector('#pin').content;
 
 var cardHousingElement = document.querySelector('#card').content.cloneNode(true);
 var map = document.querySelector('.map');
+var mapPins = document.querySelector('.map__pins');
 var adsFilter = document.querySelector('.map__filters-container');
 
 // Находим случайно число в указанных диапазонах
@@ -170,7 +171,6 @@ var creatingPin = function (ad) {
 // Генерация меток
 var generateSimilarPins = function () {
   var fragment = document.createDocumentFragment();
-  var mapPins = document.querySelector('.map__pins');
   for (var i = 0; i < MAX_ADS; i++) {
     fragment.appendChild(creatingPin(ads[i]));
   }
