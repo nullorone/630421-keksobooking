@@ -208,6 +208,14 @@ var generatePhotoList = function (ad) {
   return photoList;
 };
 
+// Вставляет сгенерированный массив фотографий жилья в разметку
+var includePhotoList = function (photoListArray, popupPhotos) {
+  for (var i = photoListArray.length - 1; i >= 0; i--) {
+    popupPhotos.insertAdjacentHTML('afterbegin', photoListArray[i]);
+  }
+  return popupPhotos;
+};
+
 // Создает карточку с информацией о жилье
 var creatingCardHousing = function (ad) {
   var cardHousingElement = cardTemplate.content.cloneNode(true);
@@ -237,7 +245,7 @@ var creatingCardHousing = function (ad) {
     ad.offer.description;
   var popupPhotos = cardHousingElement.querySelector('.popup__photos');
   popupPhotos.innerHTML = ' ';
-  popupPhotos.insertAdjacentHTML('afterbegin', generatePhotoList(ad));
+  includePhotoList(generatePhotoList(ad), popupPhotos);
   return cardHousingElement;
 };
 
