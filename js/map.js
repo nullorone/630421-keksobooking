@@ -192,11 +192,12 @@ var generateFeaturesList = function (ad) {
 };
 
 // Получает фотографии жилья
-var getPhotosItems = function (ad, popupPhotos) {
+var generatePhotoList = function (ad) {
+  var photoList = [];
   for (var i = ad.offer.photos.length - 1; i >= 0; i--) {
-    popupPhotos.insertAdjacentHTML('afterbegin', '<img src="' + ad.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
+    photoList.push('<img src="' + ad.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
   }
-  return popupPhotos;
+  return photoList;
 };
 
 // Создает карточку с информацией о жилье
@@ -224,12 +225,11 @@ var creatingCardHousing = function (ad) {
   var popupFeatures = cardHousingElement.querySelector('.popup__features');
   popupFeatures.innerHTML = ' ';
   popupFeatures.insertAdjacentHTML('afterbegin', generateFeaturesList(ad));
-  // generateFeaturesList(ad, popupFeatures);
   cardHousingElement.querySelector('.popup__description').textContent =
     ad.offer.description;
   var popupPhotos = cardHousingElement.querySelector('.popup__photos');
   popupPhotos.innerHTML = ' ';
-  getPhotosItems(ad, popupPhotos);
+  popupPhotos.insertAdjacentHTML('afterbegin', generatePhotoList(ad));
   return cardHousingElement;
 };
 
