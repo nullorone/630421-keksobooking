@@ -202,7 +202,7 @@ var includeFeaturesList = function (featuresListArray, popupFeatures) {
 // Получает фотографии жилья
 var generatePhotoList = function (ad) {
   var photoList = [];
-  for (var i = ad.offer.photos.length - 1; i >= 0; i--) {
+  for (var i = 0; i < ad.offer.photos.length; i++) {
     photoList.push('<img src="' + ad.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
   }
   return photoList;
