@@ -185,7 +185,7 @@ var getRussianTypeHousing = function (type) {
 // Генерирует список преимуществ жилья
 var generateFeaturesList = function (ad) {
   var featuresList = [];
-  for (var i = ad.offer.features.length - 1; i >= 0; i--) {
+  for (var i = 0; i < ad.offer.features.length; i++) {
     featuresList.push('<li class="popup__feature popup__feature--' + ad.offer.features[i] + '"></li>');
   }
   return featuresList;
