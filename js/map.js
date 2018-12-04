@@ -183,9 +183,10 @@ var getRussianTypeHousing = function (type) {
 };
 
 // Генерирует список преимуществ жилья
-var generateFeaturesList = function (ad, featuresList) {
+var generateFeaturesList = function (ad) {
+  var featuresList = [];
   for (var i = ad.offer.features.length - 1; i >= 0; i--) {
-    featuresList.insertAdjacentHTML('afterbegin', '<li class="popup__feature popup__feature--' + ad.offer.features[i] + '"></li>');
+    featuresList.push('<li class="popup__feature popup__feature--' + ad.offer.features[i] + '"></li>');
   }
   return featuresList;
 };
@@ -222,7 +223,8 @@ var creatingCardHousing = function (ad) {
     ad.offer.checkout;
   var popupFeatures = cardHousingElement.querySelector('.popup__features');
   popupFeatures.innerHTML = ' ';
-  generateFeaturesList(ad, popupFeatures);
+  popupFeatures.insertAdjacentHTML('afterbegin', generateFeaturesList(ad));
+  // generateFeaturesList(ad, popupFeatures);
   cardHousingElement.querySelector('.popup__description').textContent =
     ad.offer.description;
   var popupPhotos = cardHousingElement.querySelector('.popup__photos');
