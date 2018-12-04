@@ -191,6 +191,14 @@ var generateFeaturesList = function (ad) {
   return featuresList;
 };
 
+// Вставляет сгенерированный массив преимуществ в разметку
+var includeFeaturesList = function (featuresListArray, popupFeatures) {
+  for (var i = featuresListArray.length - 1; i >= 0; i--) {
+    popupFeatures.insertAdjacentHTML('afterbegin', featuresListArray[i]);
+  }
+  return popupFeatures;
+};
+
 // Получает фотографии жилья
 var generatePhotoList = function (ad) {
   var photoList = [];
@@ -224,7 +232,7 @@ var creatingCardHousing = function (ad) {
     ad.offer.checkout;
   var popupFeatures = cardHousingElement.querySelector('.popup__features');
   popupFeatures.innerHTML = ' ';
-  popupFeatures.insertAdjacentHTML('afterbegin', generateFeaturesList(ad));
+  includeFeaturesList(generateFeaturesList(ad), popupFeatures);
   cardHousingElement.querySelector('.popup__description').textContent =
     ad.offer.description;
   var popupPhotos = cardHousingElement.querySelector('.popup__photos');
