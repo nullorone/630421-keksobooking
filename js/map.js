@@ -332,7 +332,7 @@ var hideAd = function () {
 };
 
 // Скрывает объявление по нажатию на кнопку-крестик
-var onBtnCloseCardAd = function () {
+var onButtonCloseCardAd = function () {
   hideAd();
 };
 
@@ -364,8 +364,8 @@ var showAd = function (evt) {
   // Рендерит карточку объявления
   showCardHousing(creatingCardHousing(ads[INDEX_CARD]));
   document.addEventListener('keydown', onEscKeydownCloseCardAd);
-  var btnClosePopup = map.querySelector('.popup__close');
-  btnClosePopup.addEventListener('click', onBtnCloseCardAd);
+  var buttonClosePopup = map.querySelector('.popup__close');
+  buttonClosePopup.addEventListener('click', onButtonCloseCardAd);
 };
 
 
