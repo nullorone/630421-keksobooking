@@ -268,21 +268,21 @@ var selectsMapFilters = mapFilters.querySelectorAll('select');
 var fieldsetsMapFilters = mapFilters.querySelectorAll('fieldset');
 
 // Добавляет атрибут disabled всем select в форме mapFilters
-var setSelectsMapFiltersDisabled = function (state) {
+var setSelectsMapFiltersState = function (state) {
   for (var i = 0; i < selectsMapFilters.length; i++) {
     selectsMapFilters[i].disabled = state;
   }
 };
 
 // Добавляет атрибут disabled всем fieldset в форме mapFilters
-var setFieldsetsMapFiltersDisabled = function (state) {
+var setFieldsetsMapFiltersState = function (state) {
   for (var i = 0; i < fieldsetsMapFilters.length; i++) {
     fieldsetsMapFilters[i].disabled = state;
   }
 };
 
 // Добавляет атрибут disabled всем fieldset в форме adForm
-var setFieldsetsAdFormDisabled = function (state) {
+var setFieldsetsAdFormState = function (state) {
   for (var i = 0; i < fieldsetsAdForm.length; i++) {
     fieldsetsAdForm[i].disabled = state;
   }
@@ -386,18 +386,18 @@ var activationPage = function () {
   showMap();
   renderPins();
   onMapPinsClick();
-  setSelectsMapFiltersDisabled(false);
-  setFieldsetsMapFiltersDisabled(false);
-  setFieldsetsAdFormDisabled(false);
+  setSelectsMapFiltersState(false);
+  setFieldsetsMapFiltersState(false);
+  setFieldsetsAdFormState(false);
   fieldInputAddress.value = coordinateMapPinMain.x + ', ' + coordinateMapPinMain.y;
 };
 
 // Инициализация начального состояния
 var init = function () {
   fieldInputAddress.value = coordinateMapPinMain.default;
-  setSelectsMapFiltersDisabled(true);
-  setFieldsetsMapFiltersDisabled(true);
-  setFieldsetsAdFormDisabled(true);
+  setSelectsMapFiltersState(true);
+  setFieldsetsMapFiltersState(true);
+  setFieldsetsAdFormState(true);
 };
 
 init();
