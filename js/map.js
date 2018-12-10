@@ -352,6 +352,7 @@ var getIndexAvatarPin = function (evt) {
     indexAvatarPin = evt.srcElement.src.slice(-5, -4);
   }
   INDEX_CARD = indexAvatarPin - 1;
+  return INDEX_CARD;
 };
 
 var showAd = function (evt) {
