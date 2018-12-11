@@ -152,12 +152,12 @@ var generateAds = function () {
 var ads = generateAds();
 
 // // Показывает карту с объявлениями
-// var showMap = function () {
+// var enabledMap = function () {
 //   map.classList.remove('map--faded');
 // };
 
 // // Скрывает превью карты
-// showMap();
+// enabledMap();
 
 // Создает пин
 var creatingPin = function (ad) {
@@ -289,7 +289,7 @@ var setFieldsetsAdFormState = function (state) {
 };
 
 // Разблокирует форму объявления
-var activeAdForm = function () {
+var enabledAdForm = function () {
   adForm.classList.remove('ad-form--disabled');
 };
 
@@ -311,35 +311,35 @@ var getCoordinateMapPinMain = function () {
 var coordinateMapPinMain = getCoordinateMapPinMain();
 
 // Показывает карту с объявлениями
-var showMap = function () {
+var enabledMap = function () {
   map.classList.remove('map--faded');
-  activeAdForm();
+  enabledAdForm();
 };
 
 var renderPins = function () {
   if (!(mapPinMain.classList.contains('map--faded'))) {
     // Отрисовка пинов
     getSimilarPins();
-    mapPinMain.removeEventListener('mouseup', activationPage);
+    mapPinMain.removeEventListener('mouseup', onPinMainClick);
   }
 };
 
 // Скрывает объявление со страницы удаляя его из DOM
-var hideAd = function () {
+var removedAd = function () {
   var mapCard = document.querySelector('.map__card');
   map.removeChild(mapCard);
-  document.removeEventListener('keydown', onEscKeydownCloseCardAd);
+  document.removeEventListener('keydown', onDocumentKeydownEsc);
+};
+
+// Скрывает объявление по клику на кнопку-крестик
+var onButtonCloseClick = function () {
+  removedAd();
 };
 
 // Скрывает объявление по нажатию на кнопку-крестик
-var onButtonCloseCardAd = function () {
-  hideAd();
-};
-
-// Скрывает объявление по нажатию на кнопку-крестик
-var onEscKeydownCloseCardAd = function (evt) {
+var onDocumentKeydownEsc = function (evt) {
   if (evt.keyCode === 27) {
-    hideAd();
+    removedAd();
   }
 };
 
@@ -363,13 +363,13 @@ var showAd = function (evt) {
   getIndexAvatarPin(evt);
   // Рендерит карточку объявления
   showCardHousing(creatingCardHousing(ads[INDEX_CARD]));
-  document.addEventListener('keydown', onEscKeydownCloseCardAd);
+  document.addEventListener('keydown', onDocumentKeydownEsc);
   var buttonClosePopup = map.querySelector('.popup__close');
-  buttonClosePopup.addEventListener('click', onButtonCloseCardAd);
+  buttonClosePopup.addEventListener('click', onButtonCloseClick);
 };
 
 
-var onEnterKeyDownMapPin = function (evt) {
+var onMapPinKeydownEnter = function (evt) {
   if (evt.keyCode === 13) {
     showAd(evt);
   }
@@ -379,12 +379,12 @@ var onMapPinsClick = function () {
   var createdMapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   for (var i = 0; i < createdMapPins.length; i++) {
     createdMapPins[i].addEventListener('click', showAd);
-    createdMapPins[i].addEventListener('keydown', onEnterKeyDownMapPin);
+    createdMapPins[i].addEventListener('keydown', onMapPinKeydownEnter);
   }
 };
 
-var activationPage = function () {
-  showMap();
+var onPinMainClick = function () {
+  enabledMap();
   renderPins();
   onMapPinsClick();
   setSelectsMapFiltersState(false);
@@ -403,4 +403,4 @@ var init = function () {
 
 init();
 
-mapPinMain.addEventListener('mouseup', activationPage);
+mapPinMain.addEventListener('mouseup', onPinMainClick);
