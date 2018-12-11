@@ -379,10 +379,14 @@ var onMapPinKeydownEnter = function (evt) {
   }
 };
 
-var onMapPinsClick = function () {
+var onMapPinClick = function (evt) {
+  showAd(evt);
+};
+
+var generateMapPinsEvents = function () {
   var createdMapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   for (var i = 0; i < createdMapPins.length; i++) {
-    createdMapPins[i].addEventListener('click', showAd);
+    createdMapPins[i].addEventListener('click', onMapPinClick);
     createdMapPins[i].addEventListener('keydown', onMapPinKeydownEnter);
   }
 };
@@ -390,7 +394,7 @@ var onMapPinsClick = function () {
 var onPinMainClick = function () {
   enabledMap();
   renderPins();
-  onMapPinsClick();
+  generateMapPinsEvents();
   setSelectsMapFiltersState(false);
   setFieldsetsMapFiltersState(false);
   setFieldsetsAdFormState(false);
