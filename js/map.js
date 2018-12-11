@@ -47,13 +47,11 @@ var PHOTOS_HOSTEL = [
 ];
 
 var HEIGHT_TIP_MAP_PIN_MAIN = 15;
-var PIN_TEMPLATE = document.querySelector('#pin').content;
-
-var cardHousingElement = document.querySelector('#card').content;
+var pinTemplate = document.querySelector('#pin');
+var cardTemplate = document.querySelector('#card');
 var map = document.querySelector('.map');
+var mapPins = document.querySelector('.map__pins');
 var adsFilter = document.querySelector('.map__filters-container');
-var mapPin = PIN_TEMPLATE.querySelector('.map__pin');
-var mapPinImg = PIN_TEMPLATE.querySelector('img');
 
 // Находим случайно число в указанных диапазонах
 var getRandomInt = function (min, max) {
@@ -78,55 +76,44 @@ var getShuffleArray = function (array) {
   return cloneArray;
 };
 
-
-// Получаем рандомный прайс за жилье
-var getRandomPrice = function (lowPrice, highPrice) {
-  return getRandomInt(lowPrice, highPrice);
-};
-
-// Получаем рандомный тип жилья
-var getTypeHousing = function () {
-  return TYPES_HOUSING[getRandomInt(0, TYPES_HOUSING.length)];
-};
-
-// Получаем рандомное количество комнат из заданного диапазона
-var getRandomRoomsNumber = function () {
-  return getRandomInt(MIN_ROOMS_HOUSING, MAX_ROOMS_HOUSING);
-};
-
-// Получаем рандомное количество гостей из заданного диапазона
-var getRandomGuestsNumber = function (minGuests, maxGuests) {
-  return getRandomInt(minGuests, maxGuests);
-};
-
-// Получаем произвольное значение времени из массива
-var getTimeCheckins = function () {
-  return TIMES_CHECK[getRandomInt(0, TIMES_CHECK.length)];
-};
-
 // Генерация шаблона объявления
-var generateAd = function (i) {
+var generateAd = function (index) {
   // Позиция по-горизонтали
   var locationHousingX = getRandomInt(LEFT_SIDE_VIEWPORT, RIGHT_SIDE_VIEWPORT);
 
   // Получаем позицию по-вертикали
   var locationHousingY = getRandomInt(TOP_SIDE_VIEWPORT, BOTTOM_SIDE_VIEWPORT);
 
+  // Рандомный прайс за жилье
+  var randomPrice = getRandomInt(MIN_PRICE_HOUSING, MAX_PRICE_HOUSING);
+
+  // Рандомный тип жилья
+  var typeHousing = TYPES_HOUSING[getRandomInt(0, TYPES_HOUSING.length)];
+
+  // Рандомное количество комнат из заданного диапазона
+  var randomRoomsNumber = getRandomInt(MIN_ROOMS_HOUSING, MAX_ROOMS_HOUSING);
+
+  // Рандомное количество гостей из заданного диапазона
+  var randomGuestsNumber = getRandomInt(MIN_GUESTS, MAX_GUESTS);
+
+  // Получаем произвольное значение времени из массива
+  var timeCheckins = TIMES_CHECK[getRandomInt(0, TIMES_CHECK.length)];
+
   var ad = {
     author: {
-      avatar: 'img/avatars/user0' + (i + 1) + '.png'
+      avatar: 'img/avatars/user0' + (index + 1) + '.png'
     },
     offer: {
-      title: AD_TITLES[i],
+      title: AD_TITLES[index],
       address: locationHousingX +
         ', ' +
         locationHousingY,
-      price: getRandomPrice(MIN_PRICE_HOUSING, MAX_PRICE_HOUSING),
-      type: getTypeHousing(),
-      rooms: getRandomRoomsNumber(),
-      guests: getRandomGuestsNumber(MIN_GUESTS, MAX_GUESTS),
-      checkin: getTimeCheckins(),
-      checkout: getTimeCheckins(),
+      price: randomPrice,
+      type: typeHousing,
+      rooms: randomRoomsNumber,
+      guests: randomGuestsNumber,
+      checkin: timeCheckins,
+      checkout: timeCheckins,
       features: getRandomFeatures(FEATURES),
       description: '',
       photos: getShuffleArray(PHOTOS_HOSTEL)
@@ -161,7 +148,9 @@ var ads = generateAds();
 
 // Создает пин
 var creatingPin = function (ad) {
-  var template = PIN_TEMPLATE.cloneNode(true);
+  var template = pinTemplate.content.cloneNode(true);
+  var mapPin = template.querySelector('.map__pin');
+  var mapPinImg = mapPin.querySelector('img');
   var widthMapPin = mapPin.offsetWidth;
   var heightMapPin = mapPin.offsetHeight;
   mapPin.style.left = (ad.location.x - widthMapPin / 2) + 'px';
@@ -172,14 +161,20 @@ var creatingPin = function (ad) {
 };
 
 // Генерация меток
-var getSimilarPins = function () {
+var generateSimilarPins = function (adsArray) {
   var fragment = document.createDocumentFragment();
-  var mapPins = document.querySelector('.map__pins');
-  for (var i = 0; i < MAX_ADS; i++) {
-    fragment.appendChild(creatingPin(ads[i]));
+  for (var i = 0; i < adsArray.length; i++) {
+    fragment.appendChild(creatingPin(adsArray[i]));
   }
-  return mapPins.appendChild(fragment);
+  return fragment;
 };
+
+// Отрисовка пинов на карте
+var showSimilarPins = function () {
+  mapPins.appendChild(generateSimilarPins(ads));
+};
+
+// showSimilarPins();
 
 // Получает перевод английского названия типа жилья
 var getRussianTypeHousing = function (type) {
@@ -189,39 +184,52 @@ var getRussianTypeHousing = function (type) {
     'house': 'Дом',
     'palace': 'Дворец'
   };
-  for (var typeItem in typesHousing) {
-    if (type === typeItem) {
-      return typesHousing[typeItem];
-    }
-  }
-  return type;
+  return typesHousing[type];
 };
 
 // Генерирует список преимуществ жилья
-var generateFeaturesList = function (ad, featuresList) {
-  for (var i = ad.offer.features.length - 1; i >= 0; i--) {
-    featuresList.insertAdjacentHTML('afterbegin', '<li class="popup__feature popup__feature--' + ad.offer.features[i] + '"></li>');
+var generateFeaturesList = function (ad) {
+  var featuresList = [];
+  for (var i = 0; i < ad.offer.features.length; i++) {
+    featuresList.push('<li class="popup__feature popup__feature--' + ad.offer.features[i] + '"></li>');
   }
   return featuresList;
 };
 
+// Вставляет сгенерированный массив преимуществ в разметку
+var includeFeaturesList = function (featuresListArray, popupFeatures) {
+  for (var i = featuresListArray.length - 1; i >= 0; i--) {
+    popupFeatures.insertAdjacentHTML('afterbegin', featuresListArray[i]);
+  }
+  return popupFeatures;
+};
+
 // Получает фотографии жилья
-var getPhotosItems = function (ad, popupPhotos) {
-  for (var i = ad.offer.photos.length - 1; i >= 0; i--) {
-    popupPhotos.insertAdjacentHTML('afterbegin', '<img src="' + ad.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
+var generatePhotoList = function (ad) {
+  var photoList = [];
+  for (var i = 0; i < ad.offer.photos.length; i++) {
+    photoList.push('<img src="' + ad.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
+  }
+  return photoList;
+};
+
+// Вставляет сгенерированный массив фотографий жилья в разметку
+var includePhotoList = function (photoListArray, popupPhotos) {
+  for (var i = photoListArray.length - 1; i >= 0; i--) {
+    popupPhotos.insertAdjacentHTML('afterbegin', photoListArray[i]);
   }
   return popupPhotos;
 };
 
 // Создает карточку с информацией о жилье
 var creatingCardHousing = function (ad) {
-  var cardElement = cardHousingElement.cloneNode(true);
+  var cardElement = cardTemplate.content.cloneNode(true);
   cardElement.querySelector('.popup__avatar').src =
-    ad.author.avatar;
+  ad.author.avatar;
   cardElement.querySelector('.popup__title').textContent =
-    ad.offer.title;
+  ad.offer.title;
   cardElement.querySelector('.popup__text--address').textContent =
-    ad.offer.address;
+  ad.offer.address;
   cardElement.querySelector('.popup__text--price').innerHTML =
   ad.offer.price + '&#x20bd;<span>/ночь</span>';
   cardElement.querySelector('.popup__type').textContent = getRussianTypeHousing(ad.offer.type);
@@ -237,18 +245,18 @@ var creatingCardHousing = function (ad) {
     ad.offer.checkout;
   var popupFeatures = cardElement.querySelector('.popup__features');
   popupFeatures.innerHTML = ' ';
-  generateFeaturesList(ad, popupFeatures);
+  includeFeaturesList(generateFeaturesList(ad), popupFeatures);
   cardElement.querySelector('.popup__description').textContent =
     ad.offer.description;
   var popupPhotos = cardElement.querySelector('.popup__photos');
   popupPhotos.innerHTML = ' ';
-  getPhotosItems(ad, popupPhotos);
+  includePhotoList(generatePhotoList(ad), popupPhotos);
   return cardElement;
 };
 
 // Вставляет карточку объявления перед элементом фильтрации объявлений
 var showCardHousing = function (card) {
-  return map.insertBefore(card, adsFilter);
+  map.insertBefore(card, adsFilter);
 };
 
 // Описание функционала карты с метками
@@ -319,7 +327,7 @@ var enabledMap = function () {
 var renderPins = function () {
   if (!(mapPinMain.classList.contains('map--faded'))) {
     // Отрисовка пинов
-    getSimilarPins();
+    showSimilarPins();
     mapPinMain.removeEventListener('mouseup', onPinMainClick);
   }
 };
