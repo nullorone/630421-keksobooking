@@ -11,10 +11,7 @@ var MIN_ROOMS_HOUSING = 1;
 var MAX_ROOMS_HOUSING = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
-var INDEX_CARD = 2;
-// var CARD_HOUSING_ELEMENT = document.querySelector('#card').content;
-// var MAP = document.querySelector('.map');
-// var ADS_FILTER = document.querySelector('.map__filters-container');
+// var INDEX_CARD = 2;
 
 var AD_TITLES = [
   'Большая уютная квартира',
@@ -359,8 +356,8 @@ var getIndexAvatarPin = function (evt) {
   } else {
     indexAvatarPin = evt.srcElement.src.slice(-5, -4);
   }
-  INDEX_CARD = indexAvatarPin - 1;
-  return INDEX_CARD;
+  indexAvatarPin -= 1;
+  return indexAvatarPin;
 };
 
 var showAd = function (evt) {
@@ -368,9 +365,8 @@ var showAd = function (evt) {
   if (previousCard) {
     map.removeChild(previousCard);
   }
-  getIndexAvatarPin(evt);
   // Рендерит карточку объявления
-  showCardHousing(creatingCardHousing(ads[INDEX_CARD]));
+  showCardHousing(creatingCardHousing(ads[getIndexAvatarPin(evt)]));
   document.addEventListener('keydown', onDocumentKeydownEsc);
   var buttonClosePopup = map.querySelector('.popup__close');
   buttonClosePopup.addEventListener('click', onButtonCloseClick);
