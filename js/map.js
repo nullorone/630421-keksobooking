@@ -11,6 +11,8 @@ var MIN_ROOMS_HOUSING = 1;
 var MAX_ROOMS_HOUSING = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 // var INDEX_CARD = 2;
 
 var AD_TITLES = [
@@ -135,14 +137,6 @@ var generateAds = function () {
 // Присваиваем переменной генерацию массива объектов с объявлениями
 var ads = generateAds();
 
-// // Показывает карту с объявлениями
-// var enabledMap = function () {
-//   map.classList.remove('map--faded');
-// };
-
-// // Скрывает превью карты
-// enabledMap();
-
 // Создает пин
 var creatingPin = function (ad) {
   var template = pinTemplate.content.cloneNode(true);
@@ -154,6 +148,8 @@ var creatingPin = function (ad) {
   mapPin.style.top = (ad.location.y - heightMapPin) + 'px';
   mapPinImg.src = ad.author.avatar;
   mapPinImg.alt = ad.offer.title;
+  mapPin.addEventListener('click', onMapPinClick);
+  mapPin.addEventListener('keydown', onMapPinKeydownEnter);
   return template;
 };
 
@@ -170,8 +166,6 @@ var generateSimilarPins = function (adsArray) {
 var showSimilarPins = function () {
   mapPins.appendChild(generateSimilarPins(ads));
 };
-
-// showSimilarPins();
 
 // Получает перевод английского названия типа жилья
 var getRussianTypeHousing = function (type) {
@@ -272,24 +266,10 @@ var selectsMapFilters = mapFilters.querySelectorAll('select');
 
 var fieldsetsMapFilters = mapFilters.querySelectorAll('fieldset');
 
-// Добавляет атрибут disabled всем select в форме mapFilters
-var setSelectsMapFiltersState = function (state) {
-  for (var i = 0; i < selectsMapFilters.length; i++) {
-    selectsMapFilters[i].disabled = state;
-  }
-};
-
-// Добавляет атрибут disabled всем fieldset в форме mapFilters
-var setFieldsetsMapFiltersState = function (state) {
-  for (var i = 0; i < fieldsetsMapFilters.length; i++) {
-    fieldsetsMapFilters[i].disabled = state;
-  }
-};
-
-// Добавляет атрибут disabled всем fieldset в форме adForm
-var setFieldsetsAdFormState = function (state) {
-  for (var i = 0; i < fieldsetsAdForm.length; i++) {
-    fieldsetsAdForm[i].disabled = state;
+// Меняет состояние атрибута disabled у коллекции элементов
+var setStateElementsForm = function (elements, state) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].disabled = state;
   }
 };
 
@@ -343,7 +323,7 @@ var onButtonCloseClick = function () {
 
 // Скрывает объявление по нажатию на кнопку-крестик
 var onDocumentKeydownEsc = function (evt) {
-  if (evt.keyCode === 27) {
+  if (evt.keyCode === ESC_KEYCODE) {
     removedAd();
   }
 };
@@ -374,7 +354,7 @@ var showAd = function (evt) {
 
 
 var onMapPinKeydownEnter = function (evt) {
-  if (evt.keyCode === 13) {
+  if (evt.keyCode === ENTER_KEYCODE) {
     showAd(evt);
   }
 };
@@ -383,32 +363,22 @@ var onMapPinClick = function (evt) {
   showAd(evt);
 };
 
-var generateMapPinsEvents = function () {
-  var createdMapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-  for (var i = 0; i < createdMapPins.length; i++) {
-    createdMapPins[i].addEventListener('click', onMapPinClick);
-    createdMapPins[i].addEventListener('keydown', onMapPinKeydownEnter);
-  }
-};
-
 var onPinMainClick = function () {
   enabledMap();
   renderPins();
-  generateMapPinsEvents();
-  setSelectsMapFiltersState(false);
-  setFieldsetsMapFiltersState(false);
-  setFieldsetsAdFormState(false);
+  setStateElementsForm(selectsMapFilters, false);
+  setStateElementsForm(fieldsetsMapFilters, false);
+  setStateElementsForm(fieldsetsAdForm, false);
   fieldInputAddress.value = coordinateMapPinMain.x + ', ' + coordinateMapPinMain.y;
 };
 
 // Инициализация начального состояния
 var init = function () {
+  mapPinMain.addEventListener('mouseup', onPinMainClick);
   fieldInputAddress.value = coordinateMapPinMain.default;
-  setSelectsMapFiltersState(true);
-  setFieldsetsMapFiltersState(true);
-  setFieldsetsAdFormState(true);
+  setStateElementsForm(selectsMapFilters, true);
+  setStateElementsForm(fieldsetsMapFilters, true);
+  setStateElementsForm(fieldsetsAdForm, true);
 };
 
 init();
-
-mapPinMain.addEventListener('mouseup', onPinMainClick);
