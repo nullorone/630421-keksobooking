@@ -375,6 +375,7 @@ var onPinMainClick = function () {
 // Инициализация начального состояния
 var init = function () {
   mapPinMain.addEventListener('mouseup', onPinMainClick);
+  fieldInputAddress.readOnly = true;
   fieldInputAddress.value = coordinateMapPinMain.default;
   setStateElementsForm(selectsMapFilters, true);
   setStateElementsForm(fieldsetsMapFilters, true);
