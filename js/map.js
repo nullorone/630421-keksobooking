@@ -361,6 +361,7 @@ var onPinMainClick = function () {
   setStateElementsForm(fieldsetsMapFilters, false);
   setStateElementsForm(fieldsetsAdForm, false);
   fieldInputAddress.value = coordinateMapPinMain.x + ', ' + coordinateMapPinMain.y;
+  configuresAdForm();
 };
 
 // Инициализация начального состояния
@@ -374,3 +375,76 @@ var init = function () {
 };
 
 init();
+
+// Обработка формы подачи объявления
+
+var priceHousing = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+
+var selectTimeinAdForm = adForm.querySelector('#timein');
+var selectTimeoutAdForm = adForm.querySelector('#timeout');
+
+// Синхронизирует изменение времени заезда с временем выезда
+selectTimeinAdForm.addEventListener('change', function (evt) {
+  selectTimeoutAdForm.children[evt.target.selectedIndex].selected = true;
+});
+
+// Синхронизирует изменение времени выезда с временем заезда
+selectTimeoutAdForm.addEventListener('change', function (evt) {
+  selectTimeinAdForm.children[evt.target.selectedIndex].selected = true;
+});
+
+var configuresAdForm = function () {
+  adForm.action = 'https://js.dump.academy/keksobooking';
+
+  var inputTitleAdForm = adForm.querySelector('#title');
+  if (inputTitleAdForm.type !== 'text') {
+    inputTitleAdForm.type = 'text';
+  }
+  inputTitleAdForm.minLength = 30;
+  inputTitleAdForm.maxLength = 100;
+  inputTitleAdForm.required = true;
+
+  var inputPriceAdForm = adForm.querySelector('#price');
+  if (inputPriceAdForm.type !== 'number') {
+    inputPriceAdForm.type = 'number';
+  }
+  inputPriceAdForm.min = priceHousing.flat;
+  inputPriceAdForm.placeholder = priceHousing.flat;
+  inputPriceAdForm.max = 1000000;
+  inputPriceAdForm.required = true;
+};
+
+// Генерация сообщения об успешной или ошибочной отправки данных формы объявления
+
+var mainNodeElement = document.querySelector('main');
+
+var generateAdFormMessage = function (status) {
+  var messageTemplate = document.querySelector('#' + status);
+  var messageElement = messageTemplate.content.cloneNode(true);
+  mainNodeElement.appendChild(messageElement);
+
+  var deletedLastChildMain = function () {
+    mainNodeElement.removeChild(mainNodeElement.lastChild);
+  };
+
+  var onMainNodeElementClick = function () {
+    deletedLastChildMain();
+    mainNodeElement.removeEventListener('click', onMainNodeElementClick);
+  };
+
+  var onMainNodeElementKeydownEsc = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      deletedLastChildMain();
+      mainNodeElement.removeEventListener('keydown', onMainNodeElementKeydownEsc);
+    }
+  };
+
+  mainNodeElement.addEventListener('click', onMainNodeElementClick);
+  mainNodeElement.addEventListener('keydown', onMainNodeElementKeydownEsc);
+};
+
