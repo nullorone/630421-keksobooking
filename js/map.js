@@ -148,8 +148,28 @@ var creatingPin = function (ad) {
   mapPin.style.top = (ad.location.y - heightMapPin) + 'px';
   mapPinImg.src = ad.author.avatar;
   mapPinImg.alt = ad.offer.title;
-  mapPin.addEventListener('click', onMapPinClick);
-  mapPin.addEventListener('keydown', onMapPinKeydownEnter);
+
+  var renderCard = function () {
+    var previousCard = map.querySelector('.map__card');
+    if (previousCard) {
+      map.removeChild(previousCard);
+    }
+    showCardHousing(creatingCardHousing(ad));
+  };
+
+  // Отрисовывает карточку пина, на который был сделан клик
+  mapPin.addEventListener('click', function () {
+    renderCard();
+    showAd();
+  });
+
+  // Отрисовывает карточку пина, на котором было сделано нажатие Enter
+  mapPin.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      renderCard();
+      showAd();
+    }
+  });
   return template;
 };
 
@@ -328,39 +348,10 @@ var onDocumentKeydownEsc = function (evt) {
   }
 };
 
-// Получает индекс аватарки автора объявления
-var getIndexAvatarPin = function (evt) {
-  var indexAvatarPin;
-  if (evt.target.className === 'map__pin') {
-    indexAvatarPin = evt.target.firstElementChild.src.slice(-5, -4);
-  } else {
-    indexAvatarPin = evt.srcElement.src.slice(-5, -4);
-  }
-  indexAvatarPin -= 1;
-  return indexAvatarPin;
-};
-
-var showAd = function (evt) {
-  var previousCard = map.querySelector('.map__card');
-  if (previousCard) {
-    map.removeChild(previousCard);
-  }
-  // Рендерит карточку объявления
-  showCardHousing(creatingCardHousing(ads[getIndexAvatarPin(evt)]));
+var showAd = function () {
   document.addEventListener('keydown', onDocumentKeydownEsc);
   var buttonClosePopup = map.querySelector('.popup__close');
   buttonClosePopup.addEventListener('click', onButtonCloseClick);
-};
-
-
-var onMapPinKeydownEnter = function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    showAd(evt);
-  }
-};
-
-var onMapPinClick = function (evt) {
-  showAd(evt);
 };
 
 var onPinMainClick = function () {
