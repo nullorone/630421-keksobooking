@@ -11,7 +11,7 @@ var MIN_ROOMS_HOUSING = 1;
 var MAX_ROOMS_HOUSING = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
-var INDEX_CARD = 2;
+// var INDEX_CARD = 2;
 
 var AD_TITLES = [
   'Большая уютная квартира',
@@ -43,6 +43,7 @@ var PHOTOS_HOSTEL = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var HEIGHT_TIP_MAP_PIN_MAIN = 15;
 var pinTemplate = document.querySelector('#pin');
 var cardTemplate = document.querySelector('#card');
 var map = document.querySelector('.map');
@@ -134,13 +135,13 @@ var generateAds = function () {
 // Присваиваем переменной генерацию массива объектов с объявлениями
 var ads = generateAds();
 
-// Показывает карту с объявлениями
-var showMap = function () {
-  map.classList.remove('map--faded');
-};
+// // Показывает карту с объявлениями
+// var enabledMap = function () {
+//   map.classList.remove('map--faded');
+// };
 
-// Скрывает превью карты
-showMap();
+// // Скрывает превью карты
+// enabledMap();
 
 // Создает пин
 var creatingPin = function (ad) {
@@ -169,7 +170,8 @@ var generateSimilarPins = function (adsArray) {
 var showSimilarPins = function () {
   mapPins.appendChild(generateSimilarPins(ads));
 };
-showSimilarPins();
+
+// showSimilarPins();
 
 // Получает перевод английского названия типа жилья
 var getRussianTypeHousing = function (type) {
@@ -218,35 +220,35 @@ var includePhotoList = function (photoListArray, popupPhotos) {
 
 // Создает карточку с информацией о жилье
 var creatingCardHousing = function (ad) {
-  var cardHousingElement = cardTemplate.content.cloneNode(true);
-  cardHousingElement.querySelector('.popup__avatar').src =
+  var cardElement = cardTemplate.content.cloneNode(true);
+  cardElement.querySelector('.popup__avatar').src =
   ad.author.avatar;
-  cardHousingElement.querySelector('.popup__title').textContent =
+  cardElement.querySelector('.popup__title').textContent =
   ad.offer.title;
-  cardHousingElement.querySelector('.popup__text--address').textContent =
+  cardElement.querySelector('.popup__text--address').textContent =
   ad.offer.address;
-  cardHousingElement.querySelector('.popup__text--price').innerHTML =
+  cardElement.querySelector('.popup__text--price').innerHTML =
   ad.offer.price + '&#x20bd;<span>/ночь</span>';
-  cardHousingElement.querySelector('.popup__type').textContent = getRussianTypeHousing(ad.offer.type);
-  cardHousingElement.querySelector('.popup__text--capacity').textContent =
+  cardElement.querySelector('.popup__type').textContent = getRussianTypeHousing(ad.offer.type);
+  cardElement.querySelector('.popup__text--capacity').textContent =
     ad.offer.rooms +
     ' комнаты для ' +
     ad.offer.guests +
     ' гостей';
-  cardHousingElement.querySelector('.popup__text--time').textContent =
+  cardElement.querySelector('.popup__text--time').textContent =
     'Заезд после ' +
     ad.offer.checkin +
     ', выезд до ' +
     ad.offer.checkout;
-  var popupFeatures = cardHousingElement.querySelector('.popup__features');
+  var popupFeatures = cardElement.querySelector('.popup__features');
   popupFeatures.innerHTML = ' ';
   includeFeaturesList(generateFeaturesList(ad), popupFeatures);
-  cardHousingElement.querySelector('.popup__description').textContent =
+  cardElement.querySelector('.popup__description').textContent =
     ad.offer.description;
-  var popupPhotos = cardHousingElement.querySelector('.popup__photos');
+  var popupPhotos = cardElement.querySelector('.popup__photos');
   popupPhotos.innerHTML = ' ';
   includePhotoList(generatePhotoList(ad), popupPhotos);
-  return cardHousingElement;
+  return cardElement;
 };
 
 // Вставляет карточку объявления перед элементом фильтрации объявлений
@@ -254,5 +256,159 @@ var showCardHousing = function (card) {
   map.insertBefore(card, adsFilter);
 };
 
-// Рендерит карточку объявления
-showCardHousing(creatingCardHousing(ads[INDEX_CARD]));
+// Описание функционала карты с метками
+
+var mapPinMain = document.querySelector('.map__pin--main');
+
+var adForm = document.querySelector('.ad-form');
+
+var fieldsetsAdForm = adForm.querySelectorAll('fieldset');
+
+var fieldInputAddress = adForm.querySelector('#address');
+
+var mapFilters = document.querySelector('.map__filters');
+
+var selectsMapFilters = mapFilters.querySelectorAll('select');
+
+var fieldsetsMapFilters = mapFilters.querySelectorAll('fieldset');
+
+// Добавляет атрибут disabled всем select в форме mapFilters
+var setSelectsMapFiltersState = function (state) {
+  for (var i = 0; i < selectsMapFilters.length; i++) {
+    selectsMapFilters[i].disabled = state;
+  }
+};
+
+// Добавляет атрибут disabled всем fieldset в форме mapFilters
+var setFieldsetsMapFiltersState = function (state) {
+  for (var i = 0; i < fieldsetsMapFilters.length; i++) {
+    fieldsetsMapFilters[i].disabled = state;
+  }
+};
+
+// Добавляет атрибут disabled всем fieldset в форме adForm
+var setFieldsetsAdFormState = function (state) {
+  for (var i = 0; i < fieldsetsAdForm.length; i++) {
+    fieldsetsAdForm[i].disabled = state;
+  }
+};
+
+// Разблокирует форму объявления
+var enabledAdForm = function () {
+  adForm.classList.remove('ad-form--disabled');
+};
+
+// Высчитывает координаты наконечника главного пина
+var getCoordinateMapPinMain = function () {
+  var coordinateX = Math.floor(mapPinMain.offsetWidth / 2 + mapPinMain.offsetLeft);
+  var coordinateY = mapPinMain.offsetTop + mapPinMain.offsetHeight + HEIGHT_TIP_MAP_PIN_MAIN;
+  var defaultX = Math.floor(mapPinMain.offsetWidth / 2 + mapPinMain.offsetLeft);
+  var defaultY = Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
+  var coordinate = {
+    x: coordinateX,
+    y: coordinateY,
+    default: defaultX + ', ' + defaultY
+  };
+
+  return coordinate;
+};
+
+var coordinateMapPinMain = getCoordinateMapPinMain();
+
+// Показывает карту с объявлениями
+var enabledMap = function () {
+  map.classList.remove('map--faded');
+  enabledAdForm();
+};
+
+var renderPins = function () {
+  if (!(mapPinMain.classList.contains('map--faded'))) {
+    // Отрисовка пинов
+    showSimilarPins();
+    mapPinMain.removeEventListener('mouseup', onPinMainClick);
+  }
+};
+
+// Скрывает объявление со страницы удаляя его из DOM
+var removedAd = function () {
+  var mapCard = document.querySelector('.map__card');
+  map.removeChild(mapCard);
+  document.removeEventListener('keydown', onDocumentKeydownEsc);
+};
+
+// Скрывает объявление по клику на кнопку-крестик
+var onButtonCloseClick = function () {
+  removedAd();
+};
+
+// Скрывает объявление по нажатию на кнопку-крестик
+var onDocumentKeydownEsc = function (evt) {
+  if (evt.keyCode === 27) {
+    removedAd();
+  }
+};
+
+// Получает индекс аватарки автора объявления
+var getIndexAvatarPin = function (evt) {
+  var indexAvatarPin;
+  if (evt.target.className === 'map__pin') {
+    indexAvatarPin = evt.target.firstElementChild.src.slice(-5, -4);
+  } else {
+    indexAvatarPin = evt.srcElement.src.slice(-5, -4);
+  }
+  indexAvatarPin -= 1;
+  return indexAvatarPin;
+};
+
+var showAd = function (evt) {
+  var previousCard = map.querySelector('.map__card');
+  if (previousCard) {
+    map.removeChild(previousCard);
+  }
+  // Рендерит карточку объявления
+  showCardHousing(creatingCardHousing(ads[getIndexAvatarPin(evt)]));
+  document.addEventListener('keydown', onDocumentKeydownEsc);
+  var buttonClosePopup = map.querySelector('.popup__close');
+  buttonClosePopup.addEventListener('click', onButtonCloseClick);
+};
+
+
+var onMapPinKeydownEnter = function (evt) {
+  if (evt.keyCode === 13) {
+    showAd(evt);
+  }
+};
+
+var onMapPinClick = function (evt) {
+  showAd(evt);
+};
+
+var generateMapPinsEvents = function () {
+  var createdMapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < createdMapPins.length; i++) {
+    createdMapPins[i].addEventListener('click', onMapPinClick);
+    createdMapPins[i].addEventListener('keydown', onMapPinKeydownEnter);
+  }
+};
+
+var onPinMainClick = function () {
+  enabledMap();
+  renderPins();
+  generateMapPinsEvents();
+  setSelectsMapFiltersState(false);
+  setFieldsetsMapFiltersState(false);
+  setFieldsetsAdFormState(false);
+  fieldInputAddress.value = coordinateMapPinMain.x + ', ' + coordinateMapPinMain.y;
+};
+
+// Инициализация начального состояния
+var init = function () {
+  fieldInputAddress.value = coordinateMapPinMain.default;
+  setSelectsMapFiltersState(true);
+  setFieldsetsMapFiltersState(true);
+  setFieldsetsAdFormState(true);
+};
+
+init();
+
+mapPinMain.addEventListener('mouseup', onPinMainClick);
