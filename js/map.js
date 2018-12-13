@@ -13,6 +13,11 @@ var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
+var MIN_LENGTH_TITLE_AD = 30;
+var MAX_LENGTH_TITLE_AD = 30;
+var MIN_PRICE_FOR_FLAT = 1000;
+var MIN_PRICE_FOR_HOUSE = 5000;
+var MIN_PRICE_FOR_PALACE = 10000;
 // var INDEX_CARD = 2;
 
 var AD_TITLES = [
@@ -378,20 +383,22 @@ init();
 
 // Обработка формы подачи объявления
 
+// Минимальные цены для типов жилья
 var priceHousing = {
   bungalo: 0,
-  flat: 1000,
-  house: 5000,
-  palace: 10000
+  flat: MIN_PRICE_FOR_FLAT,
+  house: MIN_PRICE_FOR_HOUSE,
+  palace: MIN_PRICE_FOR_PALACE
 };
 
 var inputTitleAdForm = adForm.querySelector('#title');
 var selectTimeinAdForm = adForm.querySelector('#timein');
 var selectTimeoutAdForm = adForm.querySelector('#timeout');
 var inputPriceAdForm = adForm.querySelector('#price');
-var inputTypeHousingAdForm = adForm.querySelector('#type');
-var inputRoomNumberAdForm = adForm.querySelector('#room_number');
-var inputCapacityAdForm = adForm.querySelector('#capacity');
+var selectTypeHousingAdForm = adForm.querySelector('#type');
+var selectRoomNumberAdForm = adForm.querySelector('#room_number');
+var selectCapacityAdForm = adForm.querySelector('#capacity');
+var optionsCapacityAdForm = selectCapacityAdForm.querySelectorAll('option');
 
 // Синхронизирует изменение времени заезда с временем выезда
 selectTimeinAdForm.addEventListener('change', function (evt) {
@@ -406,24 +413,39 @@ selectTimeoutAdForm.addEventListener('change', function (evt) {
 var configuresAdForm = function () {
   adForm.action = 'https://js.dump.academy/keksobooking';
 
+  configuresInputTitle();
+  configuresInputPrice();
+  configuresCapacity();
+};
+
+var configuresInputTitle = function () {
   if (inputTitleAdForm.type !== 'text') {
     inputTitleAdForm.type = 'text';
   }
-  inputTitleAdForm.minLength = 30;
-  inputTitleAdForm.maxLength = 100;
+  inputTitleAdForm.minLength = MIN_LENGTH_TITLE_AD;
+  inputTitleAdForm.maxLength = MAX_LENGTH_TITLE_AD;
   inputTitleAdForm.required = true;
+};
 
+var configuresInputPrice = function () {
   if (inputPriceAdForm.type !== 'number') {
     inputPriceAdForm.type = 'number';
   }
   inputPriceAdForm.min = priceHousing.flat;
   inputPriceAdForm.placeholder = priceHousing.flat;
-  inputPriceAdForm.max = 1000000;
+  inputPriceAdForm.max = MAX_PRICE_HOUSING;
   inputPriceAdForm.required = true;
-  Array.prototype.forEach.call(inputCapacityAdForm.children, function (child) {
-    child.disabled = true;
-  });
-  inputCapacityAdForm.children[2].selected = true;
+};
+
+var configuresCapacity = function () {
+  for (var i = 0; i < optionsCapacityAdForm.length; i++) {
+    optionsCapacityAdForm[i].disabled = true;
+
+    if (optionsCapacityAdForm[i].textContent === 'для 1 гостя') {
+      optionsCapacityAdForm[i].selected = true;
+      optionsCapacityAdForm[i].disabled = false;
+    }
+  }
 };
 
 // Изменяет минимальное значение и placeholder у инпута "Цена за ночь"
@@ -437,27 +459,27 @@ var onInputTypeHousingChange = function (evt) {
   changePriceNight(evt);
 };
 
-inputTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
+selectTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
 
-// Добавляет состояние disabled пунктам, которые соответствуют выбранному количеству комнат
+// Соотношение кол-во комнат и кол-во мест
+var compareRoomsPlaces = {
+  1: [optionsCapacityAdForm[2]], // 1 комната - для 1 гостя
+  2: [optionsCapacityAdForm[1], optionsCapacityAdForm[2]], // 2 комнаты - для 2 гостей и 1 гостя
+  3: [optionsCapacityAdForm[0], optionsCapacityAdForm[1], optionsCapacityAdForm[2]], // 3 комнаты для 3 гостей, для 2 гостей, для 1 гостя
+  100: [optionsCapacityAdForm[3]] // 100 комнат - не для гостей
+};
+
+// Добавляет состояние disabled пунктам, которые не соответствуют выбранному количеству комнат
 var setStateInputNumberPlaces = function (evt) {
-
-  var compareRoomsPlaces = {
-    1: [inputCapacityAdForm.children[2]], // 1 комната
-    2: [inputCapacityAdForm.children[1], inputCapacityAdForm.children[2]], // 2 комната
-    3: [inputCapacityAdForm.children[0], inputCapacityAdForm.children[1], inputCapacityAdForm.children[2]], // 3 комната
-    100: [inputCapacityAdForm.children[3]] // 100 комнат
-  };
+  for (var i = 0; i < optionsCapacityAdForm.length; i++) {
+    optionsCapacityAdForm[i].disabled = true;
+  }
 
   var valueCapacity = evt.target.value;
 
-  var capacityChildrens = inputCapacityAdForm.children;
-  Array.prototype.forEach.call(capacityChildrens, function (child) {
-    child.disabled = true;
-    compareRoomsPlaces[valueCapacity].forEach(function (item) {
-      item.selected = true;
-      item.disabled = false;
-    });
+  compareRoomsPlaces[valueCapacity].forEach(function (place) {
+    place.selected = true;
+    place.disabled = false;
   });
 };
 
@@ -465,12 +487,13 @@ var onInputRoomNumberChange = function (evt) {
   setStateInputNumberPlaces(evt);
 };
 
-inputRoomNumberAdForm.addEventListener('change', onInputRoomNumberChange);
+selectRoomNumberAdForm.addEventListener('change', onInputRoomNumberChange);
 
 var buttonResetAdForm = adForm.querySelector('.ad-form__reset');
 
 // Устанавливает дефолтное состояние всех элементов на странице
 var defaultStatePage = function () {
+  adForm.reset();
   adForm.classList.add('ad-form--disabled');
   map.classList.add('map--faded');
   var mapCard = map.querySelector('.map__card');
