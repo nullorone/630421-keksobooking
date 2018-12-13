@@ -385,8 +385,13 @@ var priceHousing = {
   palace: 10000
 };
 
+var inputTitleAdForm = adForm.querySelector('#title');
 var selectTimeinAdForm = adForm.querySelector('#timein');
 var selectTimeoutAdForm = adForm.querySelector('#timeout');
+var inputPriceAdForm = adForm.querySelector('#price');
+var inputTypeHousingAdForm = adForm.querySelector('#type');
+var inputRoomNumberAdForm = adForm.querySelector('#room_number');
+var inputCapacityAdForm = adForm.querySelector('#capacity');
 
 // Синхронизирует изменение времени заезда с временем выезда
 selectTimeinAdForm.addEventListener('change', function (evt) {
@@ -401,7 +406,6 @@ selectTimeoutAdForm.addEventListener('change', function (evt) {
 var configuresAdForm = function () {
   adForm.action = 'https://js.dump.academy/keksobooking';
 
-  var inputTitleAdForm = adForm.querySelector('#title');
   if (inputTitleAdForm.type !== 'text') {
     inputTitleAdForm.type = 'text';
   }
@@ -409,7 +413,6 @@ var configuresAdForm = function () {
   inputTitleAdForm.maxLength = 100;
   inputTitleAdForm.required = true;
 
-  var inputPriceAdForm = adForm.querySelector('#price');
   if (inputPriceAdForm.type !== 'number') {
     inputPriceAdForm.type = 'number';
   }
@@ -417,34 +420,102 @@ var configuresAdForm = function () {
   inputPriceAdForm.placeholder = priceHousing.flat;
   inputPriceAdForm.max = 1000000;
   inputPriceAdForm.required = true;
+  Array.prototype.forEach.call(inputCapacityAdForm.children, function (child) {
+    child.disabled = true;
+  });
+  inputCapacityAdForm.children[2].selected = true;
 };
+
+// Изменяет минимальное значение и placeholder у инпута "Цена за ночь"
+var changePriceNight = function (evt) {
+  var valueTypeHousing = evt.target.value;
+  inputPriceAdForm.min = priceHousing[valueTypeHousing];
+  inputPriceAdForm.placeholder = priceHousing[valueTypeHousing];
+};
+
+var onInputTypeHousingChange = function (evt) {
+  changePriceNight(evt);
+};
+
+inputTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
+
+// Добавляет состояние disabled пунктам, которые соответствуют выбранному количеству комнат
+var setStateInputNumberPlaces = function (evt) {
+
+  var compareRoomsPlaces = {
+    1: [inputCapacityAdForm.children[2]], // 1 комната
+    2: [inputCapacityAdForm.children[1], inputCapacityAdForm.children[2]], // 2 комната
+    3: [inputCapacityAdForm.children[0], inputCapacityAdForm.children[1], inputCapacityAdForm.children[2]], // 3 комната
+    100: [inputCapacityAdForm.children[3]] // 100 комнат
+  };
+
+  var valueCapacity = evt.target.value;
+
+  var capacityChildrens = inputCapacityAdForm.children;
+  Array.prototype.forEach.call(capacityChildrens, function (child) {
+    child.disabled = true;
+    compareRoomsPlaces[valueCapacity].forEach(function (item) {
+      item.selected = true;
+      item.disabled = false;
+    });
+  });
+};
+
+var onInputRoomNumberChange = function (evt) {
+  setStateInputNumberPlaces(evt);
+};
+
+inputRoomNumberAdForm.addEventListener('change', onInputRoomNumberChange);
+
+var buttonResetAdForm = adForm.querySelector('.ad-form__reset');
+
+// Устанавливает дефолтное состояние всех элементов на странице
+var defaultStatePage = function () {
+  adForm.classList.add('ad-form--disabled');
+  map.classList.add('map--faded');
+  var mapCard = map.querySelector('.map__card');
+  if (mapCard) {
+    mapCard.remove();
+  }
+  while (mapPinMain.nextElementSibling) {
+    mapPinMain.nextElementSibling.remove();
+  }
+  init();
+};
+
+// Устанавливает дефолтное состояние всех элементов страницы при клике на кнопку "Очистить" в форме AdForm
+var onButtonResetClick = function () {
+  defaultStatePage();
+};
+
+buttonResetAdForm.addEventListener('click', onButtonResetClick);
 
 // Генерация сообщения об успешной или ошибочной отправки данных формы объявления
 
-var mainNodeElement = document.querySelector('main');
+// var mainNodeElement = document.querySelector('main');
 
-var generateAdFormMessage = function (status) {
-  var messageTemplate = document.querySelector('#' + status);
-  var messageElement = messageTemplate.content.cloneNode(true);
-  mainNodeElement.appendChild(messageElement);
+// var generateAdFormMessage = function (status) {
+//   var messageTemplate = document.querySelector('#' + status);
+//   var messageElement = messageTemplate.content.cloneNode(true);
+//   mainNodeElement.appendChild(messageElement);
 
-  var deletedLastChildMain = function () {
-    mainNodeElement.removeChild(mainNodeElement.lastChild);
-  };
+//   var deletedLastChildMain = function () {
+//     mainNodeElement.removeChild(mainNodeElement.lastChild);
+//   };
 
-  var onMainNodeElementClick = function () {
-    deletedLastChildMain();
-    mainNodeElement.removeEventListener('click', onMainNodeElementClick);
-  };
+//   var onMainNodeElementClick = function () {
+//     deletedLastChildMain();
+//     mainNodeElement.removeEventListener('click', onMainNodeElementClick);
+//   };
 
-  var onMainNodeElementKeydownEsc = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      deletedLastChildMain();
-      mainNodeElement.removeEventListener('keydown', onMainNodeElementKeydownEsc);
-    }
-  };
+//   var onMainNodeElementKeydownEsc = function (evt) {
+//     if (evt.keyCode === ESC_KEYCODE) {
+//       deletedLastChildMain();
+//       mainNodeElement.removeEventListener('keydown', onMainNodeElementKeydownEsc);
+//     }
+//   };
 
-  mainNodeElement.addEventListener('click', onMainNodeElementClick);
-  mainNodeElement.addEventListener('keydown', onMainNodeElementKeydownEsc);
-};
+//   mainNodeElement.addEventListener('click', onMainNodeElementClick);
+//   mainNodeElement.addEventListener('keydown', onMainNodeElementKeydownEsc);
+// };
 
