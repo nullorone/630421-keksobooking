@@ -18,6 +18,7 @@ var MAX_LENGTH_TITLE_AD = 30;
 var MIN_PRICE_FOR_FLAT = 1000;
 var MIN_PRICE_FOR_HOUSE = 5000;
 var MIN_PRICE_FOR_PALACE = 10000;
+var DEFAULT_NUMBER_GUESTS = '1';
 // var INDEX_CARD = 2;
 
 var AD_TITLES = [
@@ -441,7 +442,7 @@ var configuresCapacity = function () {
   for (var i = 0; i < optionsCapacityAdForm.length; i++) {
     optionsCapacityAdForm[i].disabled = true;
 
-    if (optionsCapacityAdForm[i].textContent === 'для 1 гостя') {
+    if (optionsCapacityAdForm[i].value === DEFAULT_NUMBER_GUESTS) {
       optionsCapacityAdForm[i].selected = true;
       optionsCapacityAdForm[i].disabled = false;
     }
