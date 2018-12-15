@@ -462,12 +462,24 @@ var onInputTypeHousingChange = function (evt) {
 
 selectTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
 
+// Получает объект с элементами сортированными в порядке возрастания по их соотношению со значениями в атрибутах
+var getObjectOptionsCapacity = function () {
+  var objectCapacity = {};
+  for (var i = 0; i < optionsCapacityAdForm.length; i++) {
+    var currentValue = optionsCapacityAdForm[i];
+    var currentKey = currentValue.value;
+    objectCapacity[currentKey] = currentValue;
+  }
+  return objectCapacity;
+};
+var optionsCapacity = getObjectOptionsCapacity();
+
 // Соотношение кол-во комнат и кол-во мест
 var compareRoomsPlaces = {
-  1: [optionsCapacityAdForm[2]], // 1 комната - для 1 гостя
-  2: [optionsCapacityAdForm[1], optionsCapacityAdForm[2]], // 2 комнаты - для 2 гостей и 1 гостя
-  3: [optionsCapacityAdForm[0], optionsCapacityAdForm[1], optionsCapacityAdForm[2]], // 3 комнаты для 3 гостей, для 2 гостей, для 1 гостя
-  100: [optionsCapacityAdForm[3]] // 100 комнат - не для гостей
+  1: [optionsCapacity[1]], // 1 комната - для 1 гостя
+  2: [optionsCapacity[2], optionsCapacity[1]], // 2 комнаты - для 2 гостей и 1 гостя
+  3: [optionsCapacity[3], optionsCapacity[2], optionsCapacity[1]], // 3 комнаты для 3 гостей, для 2 гостей, для 1 гостя
+  100: [optionsCapacity[0]] // 100 комнат - не для гостей
 };
 
 // Добавляет состояние disabled пунктам, которые не соответствуют выбранному количеству комнат
@@ -513,33 +525,3 @@ var onButtonResetClick = function () {
 };
 
 buttonResetAdForm.addEventListener('click', onButtonResetClick);
-
-// Генерация сообщения об успешной или ошибочной отправки данных формы объявления
-
-// var mainNodeElement = document.querySelector('main');
-
-// var generateAdFormMessage = function (status) {
-//   var messageTemplate = document.querySelector('#' + status);
-//   var messageElement = messageTemplate.content.cloneNode(true);
-//   mainNodeElement.appendChild(messageElement);
-
-//   var deletedLastChildMain = function () {
-//     mainNodeElement.removeChild(mainNodeElement.lastChild);
-//   };
-
-//   var onMainNodeElementClick = function () {
-//     deletedLastChildMain();
-//     mainNodeElement.removeEventListener('click', onMainNodeElementClick);
-//   };
-
-//   var onMainNodeElementKeydownEsc = function (evt) {
-//     if (evt.keyCode === ESC_KEYCODE) {
-//       deletedLastChildMain();
-//       mainNodeElement.removeEventListener('keydown', onMainNodeElementKeydownEsc);
-//     }
-//   };
-
-//   mainNodeElement.addEventListener('click', onMainNodeElementClick);
-//   mainNodeElement.addEventListener('keydown', onMainNodeElementKeydownEsc);
-// };
-
