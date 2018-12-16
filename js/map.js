@@ -313,7 +313,8 @@ var getCoordinateMapPinMain = function () {
   var coordinate = {
     x: coordinateX,
     y: coordinateY,
-    default: defaultX + ', ' + defaultY
+    defaultX: defaultX,
+    defaultY: defaultY
   };
 
   return coordinate;
@@ -361,6 +362,7 @@ var showAd = function () {
 
 var onPinMainClick = function (evt) {
   evt.preventDefault();
+  var dragged = false;
   var defaultPosition = {
     x: evt.clientX,
     y: evt.clientY
@@ -368,7 +370,7 @@ var onPinMainClick = function (evt) {
 
   var onMapPinMainMousemove = function (mousemoveEvt) {
     mousemoveEvt.preventDefault();
-
+    dragged = true;
     var newPosition = {
       x: mousemoveEvt.clientX - defaultPosition.x,
       y: mousemoveEvt.clientY - defaultPosition.y
@@ -380,13 +382,34 @@ var onPinMainClick = function (evt) {
     };
 
     var coordinatePin = getCoordinateMapPinMain();
-    if (mapPinMain.style.top > BOTTOM_SIDE_VIEWPORT + 'px') {
-      mapPinMain.style.top = '615px';
-      document.removeEventListener('mousemove', onMapPinMainMousemove);
-    } else if (mapPinMain.style.top < TOP_SIDE_VIEWPORT + 'px') {
-      mapPinMain.style.top = TOP_SIDE_VIEWPORT + 'px';
-      document.removeEventListener('mousemove', onMapPinMainMousemove);
+    var mapParameters = {
+      top: map.clientTop,
+      right: map.clientWidth,
+      bottom: map.clientHeight,
+      left: map.clientLeft
+    };
+
+    var limitsShift = {
+      top: mapParameters.top + TOP_SIDE_VIEWPORT - mapPinMain.offsetHeight,
+      right: mapParameters.right - mapPinMain.offsetWidth,
+      bottom: mapParameters.top + BOTTOM_SIDE_VIEWPORT - HEIGHT_TIP_MAP_PIN_MAIN,
+      left: mapParameters.left
+    };
+
+
+    if (mapPinMain.offsetLeft > limitsShift.right) {
+      mapPinMain.style.left = limitsShift.right + 'px';
+    } else if (mapPinMain.offsetLeft < limitsShift.left) {
+      mapPinMain.style.left = limitsShift.left + 'px';
     }
+
+
+    if (mapPinMain.offsetTop > limitsShift.bottom) {
+      mapPinMain.style.top = limitsShift.bottom + 'px';
+    } else if (mapPinMain.offsetTop < limitsShift.top) {
+      mapPinMain.style.top = limitsShift.top + 'px';
+    }
+
     mapPinMain.style.left = mapPinMain.offsetLeft + newPosition.x + 'px';
     mapPinMain.style.top = mapPinMain.offsetTop + newPosition.y + 'px';
     fieldInputAddress.value = coordinatePin.x + ', ' + coordinatePin.y;
@@ -395,7 +418,11 @@ var onPinMainClick = function (evt) {
 
   var onMapPinMainMouseup = function (mouseupEvt) {
     mouseupEvt.preventDefault();
+    if (!dragged) {
+      fieldInputAddress.value = coordinateMapPinMain.defaultX + ', ' + (coordinateMapPinMain.defaultY + Math.floor(mapPinMain.offsetHeight / 2));
+    }
     document.removeEventListener('mousemove', onMapPinMainMousemove);
+    document.removeEventListener('mouseup', onMapPinMainMouseup);
     enabledMap();
     renderPins();
     setStateElementsForm(selectsMapFilters, false);
@@ -404,14 +431,14 @@ var onPinMainClick = function (evt) {
     configuresAdForm();
   };
   document.addEventListener('mousemove', onMapPinMainMousemove);
-  mapPinMain.addEventListener('mouseup', onMapPinMainMouseup);
+  document.addEventListener('mouseup', onMapPinMainMouseup);
 
 };
 
 // Инициализация начального состояния
 var init = function () {
   fieldInputAddress.readOnly = true;
-  fieldInputAddress.value = coordinateMapPinMain.default;
+  fieldInputAddress.value = coordinateMapPinMain.defaultX + ', ' + coordinateMapPinMain.defaultY;
   setStateElementsForm(selectsMapFilters, true);
   setStateElementsForm(fieldsetsMapFilters, true);
   setStateElementsForm(fieldsetsAdForm, true);
