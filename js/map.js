@@ -308,12 +308,13 @@ var enabledAdForm = function () {
 var getCoordinateMapPinMain = function () {
   var coordinateX = Math.floor(mapPinMain.offsetWidth / 2 + mapPinMain.offsetLeft);
   var coordinateY = mapPinMain.offsetTop + mapPinMain.offsetHeight + HEIGHT_TIP_MAP_PIN_MAIN;
-  var defaultX = Math.floor(mapPinMain.offsetWidth / 2 + mapPinMain.offsetLeft);
+  var defaultX = coordinateX;
   var defaultY = Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
   var coordinate = {
     x: coordinateX,
     y: coordinateY,
-    default: defaultX + ', ' + defaultY
+    defaultX: defaultX,
+    defaultY: defaultY
   };
 
   return coordinate;
@@ -331,7 +332,6 @@ var renderPins = function () {
   if (!(mapPinMain.classList.contains('map--faded'))) {
     // Отрисовка пинов
     showSimilarPins();
-    mapPinMain.removeEventListener('mouseup', onPinMainClick);
   }
 };
 
@@ -360,25 +360,90 @@ var showAd = function () {
   buttonClosePopup.addEventListener('click', onButtonCloseClick);
 };
 
-var onPinMainClick = function () {
-  enabledMap();
-  renderPins();
-  setStateElementsForm(selectsMapFilters, false);
-  setStateElementsForm(fieldsetsMapFilters, false);
-  setStateElementsForm(fieldsetsAdForm, false);
-  fieldInputAddress.value = coordinateMapPinMain.x + ', ' + coordinateMapPinMain.y;
-  configuresAdForm();
+var onPinMainClick = function (evt) {
+  evt.preventDefault();
+  var dragged = false;
+  var defaultPosition = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMapPinMainMousemove = function (mousemoveEvt) {
+    mousemoveEvt.preventDefault();
+    dragged = true;
+    var newPosition = {
+      x: mousemoveEvt.clientX - defaultPosition.x,
+      y: mousemoveEvt.clientY - defaultPosition.y
+    };
+
+    defaultPosition = {
+      x: mousemoveEvt.clientX,
+      y: mousemoveEvt.clientY
+    };
+
+    var coordinatePin = getCoordinateMapPinMain();
+    var mapParameters = {
+      top: map.clientTop,
+      right: map.clientWidth,
+      bottom: map.clientHeight,
+      left: map.clientLeft
+    };
+
+    var limitsShift = {
+      top: mapParameters.top + TOP_SIDE_VIEWPORT - mapPinMain.offsetHeight - HEIGHT_TIP_MAP_PIN_MAIN + 1,
+      right: mapParameters.right - mapPinMain.offsetWidth,
+      bottom: mapParameters.top + BOTTOM_SIDE_VIEWPORT - HEIGHT_TIP_MAP_PIN_MAIN - mapPinMain.offsetHeight - 1,
+      left: mapParameters.left
+    };
+
+
+    if (mapPinMain.offsetLeft > limitsShift.right) {
+      mapPinMain.style.left = limitsShift.right + 'px';
+    } else if (mapPinMain.offsetLeft < limitsShift.left) {
+      mapPinMain.style.left = limitsShift.left + 'px';
+    }
+
+
+    if (mapPinMain.offsetTop > limitsShift.bottom) {
+      mapPinMain.style.top = limitsShift.bottom + 'px';
+    } else if (mapPinMain.offsetTop < limitsShift.top) {
+      mapPinMain.style.top = limitsShift.top + 'px';
+    }
+
+    mapPinMain.style.left = mapPinMain.offsetLeft + newPosition.x + 'px';
+    mapPinMain.style.top = mapPinMain.offsetTop + newPosition.y + 'px';
+    fieldInputAddress.value = coordinatePin.x + ', ' + coordinatePin.y;
+  };
+
+
+  var onMapPinMainMouseup = function (mouseupEvt) {
+    mouseupEvt.preventDefault();
+    if (!dragged) {
+      fieldInputAddress.value = coordinateMapPinMain.defaultX + ', ' + (coordinateMapPinMain.defaultY + Math.floor(mapPinMain.offsetHeight / 2));
+    }
+    document.removeEventListener('mousemove', onMapPinMainMousemove);
+    document.removeEventListener('mouseup', onMapPinMainMouseup);
+    enabledMap();
+    renderPins();
+    setStateElementsForm(selectsMapFilters, false);
+    setStateElementsForm(fieldsetsMapFilters, false);
+    setStateElementsForm(fieldsetsAdForm, false);
+    configuresAdForm();
+  };
+  document.addEventListener('mousemove', onMapPinMainMousemove);
+  document.addEventListener('mouseup', onMapPinMainMouseup);
+
 };
 
 // Инициализация начального состояния
 var init = function () {
-  mapPinMain.addEventListener('mouseup', onPinMainClick);
   fieldInputAddress.readOnly = true;
-  fieldInputAddress.value = coordinateMapPinMain.default;
+  fieldInputAddress.value = coordinateMapPinMain.defaultX + ', ' + coordinateMapPinMain.defaultY;
   setStateElementsForm(selectsMapFilters, true);
   setStateElementsForm(fieldsetsMapFilters, true);
   setStateElementsForm(fieldsetsAdForm, true);
 };
+mapPinMain.addEventListener('mousedown', onPinMainClick);
 
 init();
 
