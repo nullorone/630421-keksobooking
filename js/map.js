@@ -390,9 +390,9 @@ var onPinMainClick = function (evt) {
     };
 
     var limitsShift = {
-      top: mapParameters.top + TOP_SIDE_VIEWPORT - mapPinMain.offsetHeight,
+      top: mapParameters.top + TOP_SIDE_VIEWPORT - mapPinMain.offsetHeight - HEIGHT_TIP_MAP_PIN_MAIN + 1,
       right: mapParameters.right - mapPinMain.offsetWidth,
-      bottom: mapParameters.top + BOTTOM_SIDE_VIEWPORT - HEIGHT_TIP_MAP_PIN_MAIN,
+      bottom: mapParameters.top + BOTTOM_SIDE_VIEWPORT - HEIGHT_TIP_MAP_PIN_MAIN - mapPinMain.offsetHeight - 1,
       left: mapParameters.left
     };
 
