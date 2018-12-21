@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var cardTemplate = document.querySelector('#card');
   // Получает перевод английского названия типа жилья
   var getRussianTypeHousing = function (type) {
     var typesHousing = {
@@ -49,6 +48,7 @@
 
   // Создает карточку с информацией о жилье
   var creatingCardHousing = function (ad) {
+    var cardTemplate = document.querySelector('#card');
     var cardElement = cardTemplate.content.cloneNode(true);
     cardElement.querySelector('.popup__avatar').src =
     ad.author.avatar;

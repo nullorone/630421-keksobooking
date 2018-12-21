@@ -38,7 +38,6 @@
     }
   };
 
-
   var onPinMainClick = function (evt) {
     evt.preventDefault();
     var dragged = false;
@@ -124,12 +123,13 @@
   };
 
   var renderPins = function () {
-    if (!(mapPinMain.classList.contains('map--faded'))) {
+    if (!(mapPinMain.nextElementSibling)) {
       // Отрисовка пинов
       window.map.showSimilarPins();
     }
   };
   mapPinMain.addEventListener('mousedown', onPinMainClick);
+
   // Инициализация начального состояния
   var init = function () {
     fieldInputAddress.readOnly = true;
