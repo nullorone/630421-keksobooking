@@ -19,6 +19,7 @@
     window.form.initAdForm();
   };
 
+
   // Показывает карту с объявлениями
   var enabledMap = function () {
     map.classList.remove('map--faded');
