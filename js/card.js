@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
+
+  var map = document.querySelector('.map');
+
   // Получает перевод английского названия типа жилья
   var getRussianTypeHousing = function (type) {
     var typesHousing = {
@@ -80,7 +84,45 @@
     return cardElement;
   };
 
+  // Описание функционала карты с метками
+
+  // Вставляет карточку объявления перед элементом фильтрации объявлений
+  var showCardHousing = function (card) {
+    var adsFilter = document.querySelector('.map__filters-container');
+    map.insertBefore(card, adsFilter);
+  };
+
+  // Скрывает объявление со страницы удаляя его из DOM
+  var removesCard = function () {
+    var previousCard = map.querySelector('.map__card');
+    if (previousCard) {
+      map.removeChild(previousCard);
+    }
+    document.removeEventListener('keydown', onDocumentKeydownEsc);
+  };
+
+  // Скрывает объявление по клику на кнопку-крестик
+  var onButtonCloseClick = function () {
+    removesCard();
+  };
+
+  // Скрывает объявление по нажатию на кнопку-крестик
+  var onDocumentKeydownEsc = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      removesCard();
+    }
+  };
+
+  var closesCard = function () {
+    document.addEventListener('keydown', onDocumentKeydownEsc);
+    var buttonClosePopup = map.querySelector('.popup__close');
+    buttonClosePopup.addEventListener('click', onButtonCloseClick);
+  };
+
   window.card = {
-    creatingCardHousing: creatingCardHousing
+    creatingCardHousing: creatingCardHousing,
+    showCardHousing: showCardHousing,
+    removesCard: removesCard,
+    closesCard: closesCard
   };
 })();

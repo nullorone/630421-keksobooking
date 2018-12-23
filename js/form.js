@@ -17,8 +17,6 @@
     palace: MIN_PRICE_FOR_PALACE
   };
 
-  var mapPinMain = document.querySelector('.map__pin--main');
-  var map = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
   var inputTitleAdForm = adForm.querySelector('#title');
   var selectTimeinAdForm = adForm.querySelector('#timein');
@@ -28,20 +26,22 @@
   var selectRoomNumberAdForm = adForm.querySelector('#room_number');
   var selectCapacityAdForm = adForm.querySelector('#capacity');
   var optionsCapacityAdForm = selectCapacityAdForm.querySelectorAll('option');
+  var fieldInputAddress = document.querySelector('#address');
+  var fieldsetsAdForm = adForm.querySelectorAll('fieldset');
+  var mapFilters = document.querySelector('.map__filters');
+  var selectsMapFilters = mapFilters.querySelectorAll('select');
+  var fieldsetsMapFilters = mapFilters.querySelectorAll('fieldset');
 
-  // Синхронизирует изменение времени заезда с временем выезда
-  selectTimeinAdForm.addEventListener('change', function (evt) {
-    selectTimeoutAdForm.children[evt.target.selectedIndex].selected = true;
-  });
-
-  // Синхронизирует изменение времени выезда с временем заезда
-  selectTimeoutAdForm.addEventListener('change', function (evt) {
-    selectTimeinAdForm.children[evt.target.selectedIndex].selected = true;
-  });
+  var changesTimeAdForm = function (changeableSelect, changedSelect) {
+    changeableSelect.addEventListener('change', function (evt) {
+      changedSelect.children[evt.target.selectedIndex].selected = true;
+    });
+  };
 
   var configuresAdForm = function () {
     adForm.action = 'https://js.dump.academy/keksobooking';
-
+    changesTimeAdForm(selectTimeinAdForm, selectTimeoutAdForm);
+    changesTimeAdForm(selectTimeoutAdForm, selectTimeinAdForm);
     configuresInputTitle();
     configuresInputPrice();
     configuresCapacity();
@@ -130,31 +130,41 @@
 
   selectRoomNumberAdForm.addEventListener('change', onInputRoomNumberChange);
 
-  var buttonResetAdForm = adForm.querySelector('.ad-form__reset');
+  // Меняет состояние атрибута disabled у коллекции элементов
+  var setStateElementsForm = function (elements, state) {
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].disabled = state;
+    }
+  };
 
-  // Устанавливает дефолтное состояние всех элементов на странице
-  var defaultStatePage = function () {
-    adForm.reset();
-    adForm.classList.add('ad-form--disabled');
-    map.classList.add('map--faded');
-    var mapCard = map.querySelector('.map__card');
-    if (mapCard) {
-      mapCard.remove();
-    }
-    while (mapPinMain.nextElementSibling) {
-      mapPinMain.nextElementSibling.remove();
-    }
-    window.pin.init();
+  // Разблокирует форму объявления
+  var enabledAdForm = function () {
+    adForm.classList.remove('ad-form--disabled');
+    setStateElementsForm(selectsMapFilters, false);
+    setStateElementsForm(fieldsetsMapFilters, false);
+    setStateElementsForm(fieldsetsAdForm, false);
+  };
+
+  // Инициализация начального состояния формы
+  var initAdForm = function () {
+    fieldInputAddress.readOnly = true;
+    fieldInputAddress.value = window.pin.getCoordinateMapPinMain().defaultX + ', ' + window.pin.getCoordinateMapPinMain().defaultY;
+    setStateElementsForm(selectsMapFilters, true);
+    setStateElementsForm(fieldsetsMapFilters, true);
+    setStateElementsForm(fieldsetsAdForm, true);
   };
 
   // Устанавливает дефолтное состояние всех элементов страницы при клике на кнопку "Очистить" в форме AdForm
   var onButtonResetClick = function () {
-    defaultStatePage();
+    window.map.defaultStatePage();
   };
 
+  var buttonResetAdForm = adForm.querySelector('.ad-form__reset');
   buttonResetAdForm.addEventListener('click', onButtonResetClick);
 
   window.form = {
-    configuresAdForm: configuresAdForm
+    configuresAdForm: configuresAdForm,
+    enabledAdForm: enabledAdForm,
+    initAdForm: initAdForm
   };
 })();

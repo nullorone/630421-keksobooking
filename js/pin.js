@@ -5,13 +5,8 @@
   var TOP_SIDE_VIEWPORT = 130; // Минимальное положение пина от верхнего края вьюпорта с учетом высоты пина
   var BOTTOM_SIDE_VIEWPORT = 630; // Минимальное положение пина от нижнего края вьюпорта с учетом высоты пина
   var mapPinMain = document.querySelector('.map__pin--main');
-  var map = document.querySelector('.map');
-  var adForm = document.querySelector('.ad-form');
   var fieldInputAddress = document.querySelector('#address');
-  var fieldsetsAdForm = adForm.querySelectorAll('fieldset');
-  var mapFilters = document.querySelector('.map__filters');
-  var selectsMapFilters = mapFilters.querySelectorAll('select');
-  var fieldsetsMapFilters = mapFilters.querySelectorAll('fieldset');
+  var map = document.querySelector('.map');
 
   // Высчитывает координаты наконечника главного пина
   var getCoordinateMapPinMain = function () {
@@ -30,13 +25,6 @@
   };
 
   var coordinateMapPinMain = getCoordinateMapPinMain();
-
-  // Меняет состояние атрибута disabled у коллекции элементов
-  var setStateElementsForm = function (elements, state) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].disabled = state;
-    }
-  };
 
   var onPinMainClick = function (evt) {
     evt.preventDefault();
@@ -74,13 +62,11 @@
         left: mapParameters.left
       };
 
-
       if (mapPinMain.offsetLeft > limitsShift.right) {
         mapPinMain.style.left = limitsShift.right + 'px';
       } else if (mapPinMain.offsetLeft < limitsShift.left) {
         mapPinMain.style.left = limitsShift.left + 'px';
       }
-
 
       if (mapPinMain.offsetTop > limitsShift.bottom) {
         mapPinMain.style.top = limitsShift.bottom + 'px';
@@ -101,48 +87,19 @@
       }
       document.removeEventListener('mousemove', onMapPinMainMousemove);
       document.removeEventListener('mouseup', onMapPinMainMouseup);
-      enabledMap();
-      renderPins();
-      setStateElementsForm(selectsMapFilters, false);
-      setStateElementsForm(fieldsetsMapFilters, false);
-      setStateElementsForm(fieldsetsAdForm, false);
+      window.map.enabledMap();
+      window.pins.renderPins();
       window.form.configuresAdForm();
     };
     document.addEventListener('mousemove', onMapPinMainMousemove);
     document.addEventListener('mouseup', onMapPinMainMouseup);
 
   };
-    // Разблокирует форму объявления
-  var enabledAdForm = function () {
-    adForm.classList.remove('ad-form--disabled');
-  };
-    // Показывает карту с объявлениями
-  var enabledMap = function () {
-    map.classList.remove('map--faded');
-    enabledAdForm();
-  };
 
-  var renderPins = function () {
-    if (!(mapPinMain.nextElementSibling)) {
-      // Отрисовка пинов
-      window.map.showSimilarPins();
-    }
-  };
   mapPinMain.addEventListener('mousedown', onPinMainClick);
 
-  // Инициализация начального состояния
-  var init = function () {
-    fieldInputAddress.readOnly = true;
-    fieldInputAddress.value = coordinateMapPinMain.defaultX + ', ' + coordinateMapPinMain.defaultY;
-    setStateElementsForm(selectsMapFilters, true);
-    setStateElementsForm(fieldsetsMapFilters, true);
-    setStateElementsForm(fieldsetsAdForm, true);
-  };
-
-  init();
-
   window.pin = {
-    init: init
+    getCoordinateMapPinMain: getCoordinateMapPinMain
   };
 
 })();
