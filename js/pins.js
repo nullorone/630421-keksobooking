@@ -38,16 +38,27 @@
   // Генерация меток
   var generateSimilarPins = function (adsArray) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < adsArray.length; i++) {
+    for (var i = 0; i < 5; i++) {
+
       fragment.appendChild(creatingPin(adsArray[i]));
     }
+    console.log(fragment);
+
     return fragment;
   };
 
   // Отрисовка пинов на карте
   var showSimilarPins = function () {
     var mapPins = document.querySelector('.map__pins');
-    mapPins.appendChild(generateSimilarPins(window.data.generateAds()));
+    mapPins.appendChild(generateSimilarPins(window.backend.load(getDataSuccess, getDataError)));
+  };
+
+  var getDataSuccess = function (data) {
+    generateSimilarPins(data);
+  };
+
+  var getDataError = function (status) {
+    window.messages.generatesMessageNode(status);
   };
 
   var renderPins = function () {
