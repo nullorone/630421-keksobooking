@@ -12,7 +12,12 @@
     mainNodeElement.appendChild(messageElement);
 
     var removesMessageNode = function () {
-      mainNodeElement.removeChild(mainNodeElement.lastChild);
+      if (mainNodeElement.lastElementChild.className === 'success') {
+        mainNodeElement.removeChild(mainNodeElement.lastElementChild);
+        window.map.defaultStatePage();
+      } else if (mainNodeElement.lastElementChild.className === 'error') {
+        mainNodeElement.removeChild(mainNodeElement.lastElementChild);
+      }
     };
 
     var onMainNodeElementClick = function () {

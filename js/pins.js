@@ -38,32 +38,35 @@
   // Генерация меток
   var generateSimilarPins = function (adsArray) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < 5; i++) {
-
-      fragment.appendChild(creatingPin(adsArray[i]));
+    for (var i = 0; i < adsArray.length; i++) {
+      if (adsArray[i].offer) {
+        fragment.appendChild(creatingPin(adsArray[i]));
+      }
     }
-    console.log(fragment);
-
     return fragment;
   };
 
+
   // Отрисовка пинов на карте
-  var showSimilarPins = function () {
+  var showSimilarPins = function (data) {
     var mapPins = document.querySelector('.map__pins');
-    mapPins.appendChild(generateSimilarPins(window.backend.load(getDataSuccess, getDataError)));
+    mapPins.appendChild(generateSimilarPins(data));
   };
 
   var getDataSuccess = function (data) {
-    generateSimilarPins(data);
+    showSimilarPins(data);
   };
 
   var getDataError = function (status) {
     window.messages.generatesMessageNode(status);
   };
 
+  var getData = function () {
+    window.backend.load(getDataSuccess, getDataError);
+  };
   var renderPins = function () {
     if (!(mapPinMain.nextElementSibling)) {
-      showSimilarPins();
+      getData();
     }
   };
 
