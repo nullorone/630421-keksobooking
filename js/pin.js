@@ -12,13 +12,17 @@
   var getCoordinateMapPinMain = function () {
     var coordinateX = Math.floor(mapPinMain.offsetWidth / 2 + mapPinMain.offsetLeft);
     var coordinateY = mapPinMain.offsetTop + mapPinMain.offsetHeight + HEIGHT_TIP_MAP_PIN_MAIN;
-    var defaultX = coordinateX;
-    var defaultY = Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
+    var defaultX = mapPinMain.offsetLeft;
+    var defaultY = mapPinMain.offsetTop;
+    var defaultCentrX = coordinateX;
+    var defaultCentrY = Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
     var coordinate = {
       x: coordinateX,
       y: coordinateY,
       defaultX: defaultX,
-      defaultY: defaultY
+      defaultY: defaultY,
+      defaultCentrX: defaultCentrX,
+      defaultCentrY: defaultCentrY
     };
 
     return coordinate;

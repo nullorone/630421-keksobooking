@@ -20,7 +20,7 @@
     // Отрисовывает карточку пина, на который был сделан клик
     mapPin.addEventListener('click', function () {
       window.card.removesCard();
-      window.card.showCardHousing(window.card.creatingCardHousing(ad));
+      window.card.renderCard(ad);
       window.card.closesCard();
     });
 
@@ -28,7 +28,7 @@
     mapPin.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ENTER_KEYCODE) {
         window.card.removesCard();
-        window.card.showCardHousing(window.card.creatingCardHousing(ad));
+        window.card.renderCard(ad);
         window.card.closesCard();
       }
     });
@@ -39,20 +39,34 @@
   var generateSimilarPins = function (adsArray) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < adsArray.length; i++) {
-      fragment.appendChild(creatingPin(adsArray[i]));
+      if (adsArray[i].offer) {
+        fragment.appendChild(creatingPin(adsArray[i]));
+      }
     }
     return fragment;
   };
 
+
   // Отрисовка пинов на карте
-  var showSimilarPins = function () {
+  var showSimilarPins = function (data) {
     var mapPins = document.querySelector('.map__pins');
-    mapPins.appendChild(generateSimilarPins(window.data.generateAds()));
+    mapPins.appendChild(generateSimilarPins(data));
   };
 
+  var getDataSuccess = function (data) {
+    showSimilarPins(data);
+  };
+
+  var getDataError = function (status) {
+    window.messages.generatesMessageNode(status);
+  };
+
+  var getData = function () {
+    window.backend.load(getDataSuccess, getDataError);
+  };
   var renderPins = function () {
     if (!(mapPinMain.nextElementSibling)) {
-      showSimilarPins();
+      getData();
     }
   };
 

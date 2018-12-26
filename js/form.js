@@ -147,8 +147,9 @@
 
   // Инициализация начального состояния формы
   var initAdForm = function () {
+    var defaultCoordinatePinMain = window.pin.getCoordinateMapPinMain();
     fieldInputAddress.readOnly = true;
-    fieldInputAddress.value = window.pin.getCoordinateMapPinMain().defaultX + ', ' + window.pin.getCoordinateMapPinMain().defaultY;
+    fieldInputAddress.value = defaultCoordinatePinMain.defaultCentrX + ', ' + defaultCoordinatePinMain.defaultCentrY;
     setStateElementsForm(selectsMapFilters, true);
     setStateElementsForm(fieldsetsMapFilters, true);
     setStateElementsForm(fieldsetsAdForm, true);
@@ -161,6 +162,22 @@
 
   var buttonResetAdForm = adForm.querySelector('.ad-form__reset');
   buttonResetAdForm.addEventListener('click', onButtonResetClick);
+
+  var sendDataSuccess = function (status) {
+    window.messages.generatesMessageNode(status);
+  };
+
+  var sendDataError = function (status) {
+    window.messages.generatesMessageNode(status);
+  };
+
+  var onButtonAdFormSubmitClick = function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(adForm), sendDataSuccess, sendDataError);
+  };
+
+  adForm.addEventListener('submit', onButtonAdFormSubmitClick);
+
 
   window.form = {
     configuresAdForm: configuresAdForm,
