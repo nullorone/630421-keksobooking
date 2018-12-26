@@ -20,7 +20,7 @@
     // Отрисовывает карточку пина, на который был сделан клик
     mapPin.addEventListener('click', function () {
       window.card.removesCard();
-      window.card.showCardHousing(window.card.creatingCardHousing(ad));
+      window.card.renderCard(ad);
       window.card.closesCard();
     });
 
@@ -28,7 +28,7 @@
     mapPin.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ENTER_KEYCODE) {
         window.card.removesCard();
-        window.card.showCardHousing(window.card.creatingCardHousing(ad));
+        window.card.renderCard(ad);
         window.card.closesCard();
       }
     });

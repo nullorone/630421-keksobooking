@@ -50,6 +50,17 @@
     return popupPhotos;
   };
 
+  // Скрывает айтемы карточки, если в них не хватает информации
+  var getFilteredElement = function (element) {
+    var descriptionsElement = ['avatar', 'title', 'address', 'price', 'type', 'features', 'description', 'photos'];
+    for (var i = 0; i < descriptionsElement.length; i++) {
+      var item = element.querySelector('[class*=' + descriptionsElement[i] + ']');
+      if (item.children.length === 0 && item.innerText === false) {
+        item.hidden = true;
+      }
+    }
+  };
+
   // Создает карточку с информацией о жилье
   var creatingCardHousing = function (ad) {
     var cardTemplate = document.querySelector('#card');
@@ -81,6 +92,7 @@
     var popupPhotos = cardElement.querySelector('.popup__photos');
     popupPhotos.innerHTML = ' ';
     includePhotoList(generatePhotoList(ad), popupPhotos);
+    getFilteredElement(cardElement);
     return cardElement;
   };
 
@@ -90,6 +102,11 @@
   var showCardHousing = function (card) {
     var adsFilter = document.querySelector('.map__filters-container');
     map.insertBefore(card, adsFilter);
+  };
+
+  // Отрисовывает карточку объявления
+  var renderCard = function (ad) {
+    showCardHousing(creatingCardHousing(ad));
   };
 
   // Скрывает объявление со страницы удаляя его из DOM
@@ -120,8 +137,7 @@
   };
 
   window.card = {
-    creatingCardHousing: creatingCardHousing,
-    showCardHousing: showCardHousing,
+    renderCard: renderCard,
     removesCard: removesCard,
     closesCard: closesCard
   };
