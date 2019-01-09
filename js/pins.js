@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var ENTER_KEYCODE = 13;
-  // var MAX_ADS = 5;
+  var MAX_ADS = 5;
 
   var mapPinMain = document.querySelector('.map__pin--main');
 
@@ -39,10 +39,18 @@
   // Генерация меток
   var generateSimilarPins = function (adsArray) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < adsArray.length; i++) {
-      if (adsArray[i].offer) {
-        fragment.appendChild(creatingPin(adsArray[i]));
+    if (adsArray.length > MAX_ADS) {
+      for (var i = 0; i < MAX_ADS; i++) {
+        if (adsArray[i].offer) {
+          fragment.appendChild(creatingPin(adsArray[i]));
+        }
       }
+    } else if (adsArray.length <= MAX_ADS) {
+      adsArray.forEach(function (element) {
+        if (element.offer) {
+          fragment.appendChild(creatingPin(element));
+        }
+      });
     }
     return fragment;
   };
