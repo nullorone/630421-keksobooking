@@ -73,8 +73,8 @@
     mapPins.appendChild(window.pins.generateSimilarPins(filteredData));
   };
 
+  var timeoutUpdatePins;
   var updatePins = function (data) {
-    var timeoutUpdatePins;
     if (timeoutUpdatePins) {
       window.clearTimeout(timeoutUpdatePins);
     }
