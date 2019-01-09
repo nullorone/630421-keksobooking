@@ -79,6 +79,7 @@
       window.clearTimeout(timeoutUpdatePins);
     }
     timeoutUpdatePins = window.setTimeout(function () {
+      window.card.removesCard();
       getUpdatePins(data);
     }, DEBOUNCE_DELAY);
   };
