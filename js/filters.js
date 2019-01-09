@@ -69,11 +69,8 @@
         && featuresHousingChange(element);
     });
 
-    var uniquePins = filteredData.filter(function (element, i) {
-      return filteredData.indexOf(element) === i;
-    });
     removedPins();
-    mapPins.appendChild(window.pins.generateSimilarPins(uniquePins));
+    mapPins.appendChild(window.pins.generateSimilarPins(filteredData));
   };
 
   var updatePins = function (data) {
