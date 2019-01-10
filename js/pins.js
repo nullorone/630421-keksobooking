@@ -27,8 +27,8 @@
     // Отрисовывает карточку пина, на котором было сделано нажатие Enter
     mapPin.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ENTER_KEYCODE) {
-        mapPin.classList.add('map__pin--active');
         window.card.addsUseCard(ad);
+        mapPin.classList.add('map__pin--active');
       }
     });
     return template;
