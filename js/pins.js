@@ -20,17 +20,15 @@
 
     // Отрисовывает карточку пина, на который был сделан клик
     mapPin.addEventListener('click', function () {
-      window.card.removesCard();
-      window.card.renderCard(ad);
-      window.card.closesCard();
+      mapPin.classList.add('map__pin--active');
+      window.card.addsUseCard(ad);
     });
 
     // Отрисовывает карточку пина, на котором было сделано нажатие Enter
     mapPin.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ENTER_KEYCODE) {
-        window.card.removesCard();
-        window.card.renderCard(ad);
-        window.card.closesCard();
+        mapPin.classList.add('map__pin--active');
+        window.card.addsUseCard(ad);
       }
     });
     return template;

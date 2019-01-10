@@ -4,6 +4,7 @@
   var ESC_KEYCODE = 27;
 
   var map = document.querySelector('.map');
+  var mapPinCurrent;
 
   // Получает перевод английского названия типа жилья
   var getRussianTypeHousing = function (type) {
@@ -106,12 +107,16 @@
 
   // Отрисовывает карточку объявления
   var renderCard = function (ad) {
+    mapPinCurrent = document.querySelector('.map__pin--active');
     showCardHousing(creatingCardHousing(ad));
   };
 
   // Скрывает объявление со страницы удаляя его из DOM
   var removesCard = function () {
     var previousCard = map.querySelector('.map__card');
+    if (mapPinCurrent) {
+      mapPinCurrent.classList.remove('map__pin--active');
+    }
     if (previousCard) {
       map.removeChild(previousCard);
     }
@@ -136,9 +141,13 @@
     buttonClosePopup.addEventListener('click', onButtonCloseClick);
   };
 
+  var addsUseCard = function (ad) {
+    removesCard();
+    renderCard(ad);
+    closesCard();
+  };
+
   window.card = {
-    renderCard: renderCard,
-    removesCard: removesCard,
-    closesCard: closesCard
+    addsUseCard: addsUseCard
   };
 })();
