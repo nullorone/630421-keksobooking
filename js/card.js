@@ -148,6 +148,7 @@
   };
 
   window.card = {
-    addsUseCard: addsUseCard
+    addsUseCard: addsUseCard,
+    removesCard: removesCard
   };
 })();
