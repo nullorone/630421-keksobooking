@@ -70,7 +70,7 @@
     });
 
     removedPins();
-    mapPins.appendChild(window.pins.generateSimilarPins(filteredData));
+    mapPins.appendChild(window.pins.generatesSimilarPins(filteredData));
   };
 
   var timeoutUpdatePins;

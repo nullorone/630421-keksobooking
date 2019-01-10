@@ -92,7 +92,7 @@
       document.removeEventListener('mousemove', onMapPinMainMousemove);
       document.removeEventListener('mouseup', onMapPinMainMouseup);
       window.map.enabledMap();
-      window.pins.renderPins();
+      window.pins.rendersPins();
       window.form.configuresAdForm();
     };
     document.addEventListener('mousemove', onMapPinMainMousemove);

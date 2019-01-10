@@ -6,7 +6,7 @@
   var mapPinMain = document.querySelector('.map__pin--main');
 
   // Создает пин
-  var creatingPin = function (ad) {
+  var createsPin = function (ad) {
     var pinTemplate = document.querySelector('#pin');
     var template = pinTemplate.content.cloneNode(true);
     var mapPin = template.querySelector('.map__pin');
@@ -35,18 +35,18 @@
   };
 
   // Генерация меток
-  var generateSimilarPins = function (adsArray) {
+  var generatesSimilarPins = function (adsArray) {
     var fragment = document.createDocumentFragment();
     if (adsArray.length > MAX_ADS) {
       for (var i = 0; i < MAX_ADS; i++) {
         if (adsArray[i].offer) {
-          fragment.appendChild(creatingPin(adsArray[i]));
+          fragment.appendChild(createsPin(adsArray[i]));
         }
       }
     } else if (adsArray.length <= MAX_ADS) {
       adsArray.forEach(function (element) {
         if (element.offer) {
-          fragment.appendChild(creatingPin(element));
+          fragment.appendChild(createsPin(element));
         }
       });
     }
@@ -58,18 +58,18 @@
   var mapPins = document.querySelector('.map__pins');
 
   // Отрисовка пинов на карте
-  var showSimilarPins = function (dataHousing) {
+  var showsSimilarPins = function (dataHousing) {
 
     formFilters.addEventListener('change', function () {
       window.filters.updatePins(dataHousing);
     });
 
-    mapPins.appendChild(generateSimilarPins(dataHousing));
+    mapPins.appendChild(generatesSimilarPins(dataHousing));
   };
 
   var getDataSuccess = function (data) {
     var dataHousing = data;
-    showSimilarPins(dataHousing);
+    showsSimilarPins(dataHousing);
     formFiltersItems.forEach(function (element) {
       element.disabled = 0;
     });
@@ -85,14 +85,14 @@
     });
     window.backend.load(getDataSuccess, getDataError);
   };
-  var renderPins = function () {
+  var rendersPins = function () {
     if (!(mapPinMain.nextElementSibling)) {
       getData();
     }
   };
 
   window.pins = {
-    renderPins: renderPins,
-    generateSimilarPins: generateSimilarPins
+    rendersPins: rendersPins,
+    generatesSimilarPins: generatesSimilarPins
   };
 })();

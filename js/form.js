@@ -78,14 +78,14 @@
   };
 
   // Изменяет минимальное значение и placeholder у инпута "Цена за ночь"
-  var changePriceNight = function (evt) {
+  var changesPriceNight = function (evt) {
     var valueTypeHousing = evt.target.value;
     inputPriceAdForm.min = priceHousing[valueTypeHousing];
     inputPriceAdForm.placeholder = priceHousing[valueTypeHousing];
   };
 
   var onInputTypeHousingChange = function (evt) {
-    changePriceNight(evt);
+    changesPriceNight(evt);
   };
 
   selectTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
