@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var ENTER_KEYCODE = 13;
+  var MAX_ADS = 5;
 
   var mapPinMain = document.querySelector('.map__pin--main');
 
@@ -38,23 +39,42 @@
   // Генерация меток
   var generateSimilarPins = function (adsArray) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < adsArray.length; i++) {
-      if (adsArray[i].offer) {
-        fragment.appendChild(creatingPin(adsArray[i]));
+    if (adsArray.length > MAX_ADS) {
+      for (var i = 0; i < MAX_ADS; i++) {
+        if (adsArray[i].offer) {
+          fragment.appendChild(creatingPin(adsArray[i]));
+        }
       }
+    } else if (adsArray.length <= MAX_ADS) {
+      adsArray.forEach(function (element) {
+        if (element.offer) {
+          fragment.appendChild(creatingPin(element));
+        }
+      });
     }
     return fragment;
   };
 
+  var formFilters = document.querySelector('.map__filters');
+  var formFiltersItems = formFilters.querySelectorAll('select, input');
+  var mapPins = document.querySelector('.map__pins');
 
   // Отрисовка пинов на карте
-  var showSimilarPins = function (data) {
-    var mapPins = document.querySelector('.map__pins');
-    mapPins.appendChild(generateSimilarPins(data));
+  var showSimilarPins = function (dataHousing) {
+
+    formFilters.addEventListener('change', function () {
+      window.filters.updatePins(dataHousing);
+    });
+
+    mapPins.appendChild(generateSimilarPins(dataHousing));
   };
 
   var getDataSuccess = function (data) {
-    showSimilarPins(data);
+    var dataHousing = data;
+    showSimilarPins(dataHousing);
+    formFiltersItems.forEach(function (element) {
+      element.disabled = 0;
+    });
   };
 
   var getDataError = function (status) {
@@ -62,6 +82,9 @@
   };
 
   var getData = function () {
+    formFiltersItems.forEach(function (element) {
+      element.disabled = 1;
+    });
     window.backend.load(getDataSuccess, getDataError);
   };
   var renderPins = function () {
@@ -71,6 +94,7 @@
   };
 
   window.pins = {
-    renderPins: renderPins
+    renderPins: renderPins,
+    generateSimilarPins: generateSimilarPins
   };
 })();
