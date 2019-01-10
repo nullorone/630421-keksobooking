@@ -10,7 +10,7 @@
   var DEFAULT_NUMBER_GUESTS = '1';
 
   // Минимальные цены для типов жилья
-  var priceHousing = {
+  var PriceHousing = {
     bungalo: 0,
     flat: MIN_PRICE_FOR_FLAT,
     house: MIN_PRICE_FOR_HOUSE,
@@ -60,8 +60,8 @@
     if (inputPriceAdForm.type !== 'number') {
       inputPriceAdForm.type = 'number';
     }
-    inputPriceAdForm.min = priceHousing.flat;
-    inputPriceAdForm.placeholder = priceHousing.flat;
+    inputPriceAdForm.min = PriceHousing.flat;
+    inputPriceAdForm.placeholder = PriceHousing.flat;
     inputPriceAdForm.max = MAX_PRICE_HOUSING;
     inputPriceAdForm.required = true;
   };
@@ -80,8 +80,8 @@
   // Изменяет минимальное значение и placeholder у инпута "Цена за ночь"
   var changesPriceNight = function (evt) {
     var valueTypeHousing = evt.target.value;
-    inputPriceAdForm.min = priceHousing[valueTypeHousing];
-    inputPriceAdForm.placeholder = priceHousing[valueTypeHousing];
+    inputPriceAdForm.min = PriceHousing[valueTypeHousing];
+    inputPriceAdForm.placeholder = PriceHousing[valueTypeHousing];
   };
 
   var onInputTypeHousingChange = function (evt) {

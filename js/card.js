@@ -8,13 +8,13 @@
 
   // Получает перевод английского названия типа жилья
   var getRussianTypeHousing = function (type) {
-    var typesHousing = {
+    var TypesHousing = {
       'flat': 'Квартира',
       'bungalo': 'Бунгало',
       'house': 'Дом',
       'palace': 'Дворец'
     };
-    return typesHousing[type];
+    return TypesHousing[type];
   };
 
   // Генерирует список преимуществ жилья
