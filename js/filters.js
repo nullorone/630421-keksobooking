@@ -1,8 +1,12 @@
 'use strict';
 (function () {
-  var LOW_PRICE = 10000;
-  var HIGH_PRICE = 50000;
   var DEBOUNCE_DELAY = 500;
+
+  var PriceFilter = {
+    LOW: 10000,
+    HIGH: 50000
+  };
+
   var mapPinMain = document.querySelector('.map__pin--main');
   var mapPins = document.querySelector('.map__pins');
 
@@ -14,9 +18,9 @@
   var priceHousingChange = function (data) {
     var filterPrice = document.querySelector('#housing-price').value;
     var priceToOptionsPrices = {
-      'low': (data.offer.price < LOW_PRICE),
-      'middle': (data.offer.price >= LOW_PRICE && data.offer.price <= HIGH_PRICE),
-      'high': (data.offer.price > HIGH_PRICE)
+      'low': (data.offer.price < PriceFilter.LOW),
+      'middle': (data.offer.price >= PriceFilter.LOW && data.offer.price <= PriceFilter.HIGH),
+      'high': (data.offer.price > PriceFilter.HIGH)
     };
     return priceToOptionsPrices[filterPrice] || filterPrice === 'any';
   };
