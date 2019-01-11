@@ -68,7 +68,6 @@
         && guestsHousingChange(element)
         && featuresHousingChange(element);
     });
-
     removedPins();
     mapPins.appendChild(window.pins.generatesSimilarPins(filteredData));
   };
@@ -87,5 +86,4 @@
   window.filters = {
     updatePins: updatePins
   };
-
 })();
