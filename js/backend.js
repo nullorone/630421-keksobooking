@@ -16,8 +16,6 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === StatusCodes.success) {
-
-
         onLoad('success');
       } else if (xhr.status >= StatusCodes.error) {
         onError('error');
