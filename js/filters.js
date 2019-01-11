@@ -10,44 +10,44 @@
   var mapPinMain = document.querySelector('.map__pin--main');
   var mapPins = document.querySelector('.map__pins');
 
-  var typeHousingChange = function (data) {
+  var typeHousingChange = function (element) {
     var filterType = document.querySelector('#housing-type').value;
-    return data.offer.type === filterType || filterType === 'any';
+    return element.offer.type === filterType || filterType === 'any';
   };
 
-  var priceHousingChange = function (data) {
+  var priceHousingChange = function (element) {
     var filterPrice = document.querySelector('#housing-price').value;
     var priceToOptionsPrices = {
-      'low': (data.offer.price < PriceFilter.LOW),
-      'middle': (data.offer.price >= PriceFilter.LOW && data.offer.price <= PriceFilter.HIGH),
-      'high': (data.offer.price > PriceFilter.HIGH)
+      'low': (element.offer.price < PriceFilter.LOW),
+      'middle': (element.offer.price >= PriceFilter.LOW && element.offer.price <= PriceFilter.HIGH),
+      'high': (element.offer.price > PriceFilter.HIGH)
     };
     return priceToOptionsPrices[filterPrice] || filterPrice === 'any';
   };
 
-  var roomsHousingChange = function (data) {
+  var roomsHousingChange = function (element) {
     var filterRooms = document.querySelector('#housing-rooms').value;
     if (filterRooms !== 'any') {
       filterRooms = Number(filterRooms);
     }
-    return data.offer.rooms === filterRooms || filterRooms === 'any';
+    return element.offer.rooms === filterRooms || filterRooms === 'any';
   };
 
-  var guestsHousingChange = function (data) {
+  var guestsHousingChange = function (element) {
     var filterGuests = document.querySelector('#housing-guests').value;
     if (filterGuests !== 'any') {
       filterGuests = Number(filterGuests);
     }
-    return data.offer.guests === filterGuests || filterGuests === 'any';
+    return element.offer.guests === filterGuests || filterGuests === 'any';
   };
 
-  var featuresHousingChange = function (data) {
+  var featuresHousingChange = function (element) {
     var filterFeatures = document.querySelectorAll('#housing-features input:checked');
     if (filterFeatures.length !== 0) {
       var compare = false;
-      data.offer.features.forEach(function (element) {
+      element.offer.features.forEach(function (currentElement) {
         filterFeatures.forEach(function (item) {
-          if (element === item.value) {
+          if (currentElement === item.value) {
             compare = true;
           }
         });
