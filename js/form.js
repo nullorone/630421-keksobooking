@@ -1,11 +1,13 @@
 'use strict';
 (function () {
 // Обработка формы подачи объявления
-  var MIN_LENGTH_TITLE_AD = 30;
-  var MAX_LENGTH_TITLE_AD = 30;
   var MAX_PRICE_HOUSING = 1000000;
   var DEFAULT_NUMBER_GUESTS = '1';
 
+  var LengthTitleAd = {
+    MIN: 30,
+    MAX: 100
+  };
   // Минимальные цены для типов жилья
   var PriceHousing = {
     bungalo: 0,
@@ -48,8 +50,8 @@
     if (inputTitleAdForm.type !== 'text') {
       inputTitleAdForm.type = 'text';
     }
-    inputTitleAdForm.minLength = MIN_LENGTH_TITLE_AD;
-    inputTitleAdForm.maxLength = MAX_LENGTH_TITLE_AD;
+    inputTitleAdForm.minLength = LengthTitleAd.MIN;
+    inputTitleAdForm.maxLength = LengthTitleAd.MAX;
     inputTitleAdForm.required = true;
   };
 
