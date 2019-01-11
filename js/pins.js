@@ -35,16 +35,16 @@
   };
 
   // Генерация меток
-  var generateSimilarPins = function (adsArray) {
+  var generateSimilarPins = function (ads) {
     var fragment = document.createDocumentFragment();
-    if (adsArray.length > MAX_ADS) {
+    if (ads.length > MAX_ADS) {
       for (var i = 0; i < MAX_ADS; i++) {
-        if (adsArray[i].offer) {
-          fragment.appendChild(createPin(adsArray[i]));
+        if (ads[i].offer) {
+          fragment.appendChild(createPin(ads[i]));
         }
       }
-    } else if (adsArray.length <= MAX_ADS) {
-      adsArray.forEach(function (element) {
+    } else if (ads.length <= MAX_ADS) {
+      ads.forEach(function (element) {
         if (element.offer) {
           fragment.appendChild(createPin(element));
         }

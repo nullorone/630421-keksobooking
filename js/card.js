@@ -27,9 +27,9 @@
   };
 
   // Вставляет сгенерированный массив преимуществ в разметку
-  var includeFeaturesList = function (featuresListArray, popupFeatures) {
-    for (var i = featuresListArray.length - 1; i >= 0; i--) {
-      popupFeatures.insertAdjacentHTML('afterbegin', featuresListArray[i]);
+  var includeFeaturesList = function (featuresList, popupFeatures) {
+    for (var i = featuresList.length - 1; i >= 0; i--) {
+      popupFeatures.insertAdjacentHTML('afterbegin', featuresList[i]);
     }
     return popupFeatures;
   };
@@ -44,9 +44,9 @@
   };
 
   // Вставляет сгенерированный массив фотографий жилья в разметку
-  var includePhotoList = function (photoListArray, popupPhotos) {
-    for (var i = photoListArray.length - 1; i >= 0; i--) {
-      popupPhotos.insertAdjacentHTML('afterbegin', photoListArray[i]);
+  var includePhotoList = function (photoList, popupPhotos) {
+    for (var i = photoList.length - 1; i >= 0; i--) {
+      popupPhotos.insertAdjacentHTML('afterbegin', photoList[i]);
     }
     return popupPhotos;
   };
