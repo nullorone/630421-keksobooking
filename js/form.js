@@ -88,8 +88,6 @@
     changePriceNight(evt);
   };
 
-  selectTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
-
   // Получает объект с элементами сортированными в порядке возрастания по их соотношению со значениями в атрибутах
   var getObjectOptionsCapacity = function () {
     var objectCapacity = {};
@@ -128,21 +126,11 @@
     setStateInputNumberPlaces(evt);
   };
 
-  selectRoomNumberAdForm.addEventListener('change', onInputRoomNumberChange);
-
   // Меняет состояние атрибута disabled у коллекции элементов
   var setStateElementsForm = function (elements, state) {
     for (var i = 0; i < elements.length; i++) {
       elements[i].disabled = state;
     }
-  };
-
-  // Разблокирует форму объявления
-  var enableAdForm = function () {
-    adForm.classList.remove('ad-form--disabled');
-    setStateElementsForm(selectsMapFilters, false);
-    setStateElementsForm(fieldsetsMapFilters, false);
-    setStateElementsForm(fieldsetsAdForm, false);
   };
 
   // Инициализация начального состояния формы
@@ -161,7 +149,6 @@
   };
 
   var buttonResetAdForm = adForm.querySelector('.ad-form__reset');
-  buttonResetAdForm.addEventListener('click', onButtonResetClick);
 
   var sendDataSuccess = function (status) {
     window.messages.generatesMessageNode(status);
@@ -176,8 +163,17 @@
     window.backend.save(new FormData(adForm), sendDataSuccess, sendDataError);
   };
 
-  adForm.addEventListener('submit', onButtonAdFormSubmitClick);
-
+  // Разблокирует форму объявления
+  var enableAdForm = function () {
+    adForm.classList.remove('ad-form--disabled');
+    setStateElementsForm(selectsMapFilters, false);
+    setStateElementsForm(fieldsetsMapFilters, false);
+    setStateElementsForm(fieldsetsAdForm, false);
+    selectTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
+    selectRoomNumberAdForm.addEventListener('change', onInputRoomNumberChange);
+    buttonResetAdForm.addEventListener('click', onButtonResetClick);
+    adForm.addEventListener('submit', onButtonAdFormSubmitClick);
+  };
 
   window.form = {
     configureAdForm: configureAdForm,
