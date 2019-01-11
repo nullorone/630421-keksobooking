@@ -1,8 +1,11 @@
 'use strict';
 (function () {
   var TIMEOUT = 10000;
-  var URL_SAVE = 'https://js.dump.academy/keksobooking';
-  var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
+
+  var UrlRequest = {
+    SAVE: 'https://js.dump.academy/keksobooking',
+    LOAD: 'https://js.dump.academy/keksobooking/data'
+  };
 
   var StatusCodes = {
     SUCCESS: 200,
@@ -30,7 +33,7 @@
       onError('error');
     });
 
-    xhr.open('POST', URL_SAVE);
+    xhr.open('POST', UrlRequest.SAVE);
     xhr.send(data);
   };
 
@@ -53,7 +56,7 @@
       onError('timeout');
     });
 
-    xhr.open('GET', URL_LOAD);
+    xhr.open('GET', UrlRequest.LOAD);
     xhr.send();
   };
 
