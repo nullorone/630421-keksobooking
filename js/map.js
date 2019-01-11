@@ -27,8 +27,7 @@
     map.classList.remove('map--faded');
     window.form.enableAdForm();
   };
-  // document.addEventListener('DOMContentLoaded', function () {
-  // });
+
   window.form.initializeAdForm();
 
   window.map = {
