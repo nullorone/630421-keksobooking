@@ -6,7 +6,7 @@
   var defaultPositionPinMain = window.pin.getCoordinateMapPinMain();
 
   // Устанавливает дефолтное состояние всех элементов на странице
-  var defaultStatePage = function () {
+  var setDefaultStatePage = function () {
     adForm.reset();
     adForm.classList.add('ad-form--disabled');
     map.classList.add('map--faded');
@@ -19,20 +19,20 @@
     while (mapPinMain.nextElementSibling) {
       mapPinMain.nextElementSibling.remove();
     }
-    window.form.initAdForm();
+    window.form.initializeAdForm();
   };
 
   // Показывает карту с объявлениями
-  var enabledMap = function () {
+  var enableMap = function () {
     map.classList.remove('map--faded');
-    window.form.enabledAdForm();
+    window.form.enableAdForm();
   };
   document.addEventListener('DOMContentLoaded', function () {
-    window.form.initAdForm();
+    window.form.initializeAdForm();
   });
 
   window.map = {
-    enabledMap: enabledMap,
-    defaultStatePage: defaultStatePage
+    enableMap: enableMap,
+    setDefaultStatePage: setDefaultStatePage
   };
 })();

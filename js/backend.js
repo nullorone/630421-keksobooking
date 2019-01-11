@@ -12,7 +12,7 @@
     ERROR: 400
   };
 
-  var savesData = function (data, onLoad, onError) {
+  var saveData = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
     xhr.timeout = TIMEOUT;
@@ -37,7 +37,7 @@
     xhr.send(data);
   };
 
-  var loadingData = function (onLoad, onError) {
+  var loadData = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
@@ -61,7 +61,7 @@
   };
 
   window.backend = {
-    save: savesData,
-    load: loadingData
+    save: saveData,
+    load: loadData
   };
 })();

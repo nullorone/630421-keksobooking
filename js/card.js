@@ -18,7 +18,7 @@
   };
 
   // Генерирует список преимуществ жилья
-  var generatesFeaturesList = function (ad) {
+  var generateFeaturesList = function (ad) {
     var featuresList = [];
     ad.offer.features.forEach(function (element) {
       featuresList.push('<li class="popup__feature popup__feature--' + element + '"></li>');
@@ -35,7 +35,7 @@
   };
 
   // Генерирует фотографии жилья
-  var generatesPhotoList = function (ad) {
+  var generatePhotoList = function (ad) {
     var photoList = [];
     ad.offer.photos.forEach(function (element) {
       photoList.push('<img src="' + element + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
@@ -63,7 +63,7 @@
   };
 
   // Создает карточку с информацией о жилье
-  var createsCardHousing = function (ad) {
+  var createCardHousing = function (ad) {
     var cardTemplate = document.querySelector('#card');
     var cardElement = cardTemplate.content.cloneNode(true);
     cardElement.querySelector('.popup__avatar').src =
@@ -87,12 +87,12 @@
       ad.offer.checkout;
     var popupFeatures = cardElement.querySelector('.popup__features');
     popupFeatures.innerHTML = ' ';
-    includeFeaturesList(generatesFeaturesList(ad), popupFeatures);
+    includeFeaturesList(generateFeaturesList(ad), popupFeatures);
     cardElement.querySelector('.popup__description').textContent =
       ad.offer.description;
     var popupPhotos = cardElement.querySelector('.popup__photos');
     popupPhotos.innerHTML = ' ';
-    includePhotoList(generatesPhotoList(ad), popupPhotos);
+    includePhotoList(generatePhotoList(ad), popupPhotos);
     getFilteredElement(cardElement);
     return cardElement;
   };
@@ -100,19 +100,19 @@
   // Описание функционала карты с метками
 
   // Вставляет карточку объявления перед элементом фильтрации объявлений
-  var showsCardHousing = function (card) {
+  var showCardHousing = function (card) {
     var adsFilter = document.querySelector('.map__filters-container');
     map.insertBefore(card, adsFilter);
   };
 
   // Отрисовывает карточку объявления
-  var rendersCard = function (ad) {
+  var renderCard = function (ad) {
     mapPinCurrent = document.querySelector('.map__pin--active');
-    showsCardHousing(createsCardHousing(ad));
+    showCardHousing(createCardHousing(ad));
   };
 
   // Скрывает объявление со страницы удаляя его из DOM
-  var removesCard = function () {
+  var removeCard = function () {
     var previousCard = map.querySelector('.map__card');
     if (mapPinCurrent) {
       mapPinCurrent.classList.remove('map__pin--active');
@@ -125,30 +125,30 @@
 
   // Скрывает объявление по клику на кнопку-крестик
   var onButtonCloseClick = function () {
-    removesCard();
+    removeCard();
   };
 
   // Скрывает объявление по нажатию на кнопку-крестик
   var onDocumentKeydownEsc = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      removesCard();
+      removeCard();
     }
   };
 
-  var closesCard = function () {
+  var closeCard = function () {
     document.addEventListener('keydown', onDocumentKeydownEsc);
     var buttonClosePopup = map.querySelector('.popup__close');
     buttonClosePopup.addEventListener('click', onButtonCloseClick);
   };
 
-  var addsUseCard = function (ad) {
-    removesCard();
-    rendersCard(ad);
-    closesCard();
+  var addUseCard = function (ad) {
+    removeCard();
+    renderCard(ad);
+    closeCard();
   };
 
   window.card = {
-    addsUseCard: addsUseCard,
-    removesCard: removesCard
+    addUseCard: addUseCard,
+    removeCard: removeCard
   };
 })();

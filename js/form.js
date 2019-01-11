@@ -31,22 +31,22 @@
   var selectsMapFilters = mapFilters.querySelectorAll('select');
   var fieldsetsMapFilters = mapFilters.querySelectorAll('fieldset');
 
-  var changesTimeAdForm = function (changeableSelect, changedSelect) {
+  var changeTimeAdForm = function (changeableSelect, changedSelect) {
     changeableSelect.addEventListener('change', function (evt) {
       changedSelect.children[evt.target.selectedIndex].selected = true;
     });
   };
 
-  var configuresAdForm = function () {
+  var configureAdForm = function () {
     adForm.action = 'https://js.dump.academy/keksobooking';
-    changesTimeAdForm(selectTimeinAdForm, selectTimeoutAdForm);
-    changesTimeAdForm(selectTimeoutAdForm, selectTimeinAdForm);
-    configuresInputTitle();
-    configuresInputPrice();
-    configuresCapacity();
+    changeTimeAdForm(selectTimeinAdForm, selectTimeoutAdForm);
+    changeTimeAdForm(selectTimeoutAdForm, selectTimeinAdForm);
+    configureInputTitle();
+    configureInputPrice();
+    configureCapacity();
   };
 
-  var configuresInputTitle = function () {
+  var configureInputTitle = function () {
     if (inputTitleAdForm.type !== 'text') {
       inputTitleAdForm.type = 'text';
     }
@@ -55,7 +55,7 @@
     inputTitleAdForm.required = true;
   };
 
-  var configuresInputPrice = function () {
+  var configureInputPrice = function () {
     if (inputPriceAdForm.type !== 'number') {
       inputPriceAdForm.type = 'number';
     }
@@ -65,7 +65,7 @@
     inputPriceAdForm.required = true;
   };
 
-  var configuresCapacity = function () {
+  var configureCapacity = function () {
     for (var i = 0; i < optionsCapacityAdForm.length; i++) {
       optionsCapacityAdForm[i].disabled = true;
 
@@ -77,7 +77,7 @@
   };
 
   // Изменяет минимальное значение и placeholder у инпута "Цена за ночь"
-  var changesPriceNight = function (evt) {
+  var changePriceNight = function (evt) {
     var valueTypeHousing = evt.target.value;
     valueTypeHousing = valueTypeHousing.toUpperCase();
     inputPriceAdForm.min = PriceHousing[valueTypeHousing];
@@ -85,7 +85,7 @@
   };
 
   var onInputTypeHousingChange = function (evt) {
-    changesPriceNight(evt);
+    changePriceNight(evt);
   };
 
   selectTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
@@ -138,7 +138,7 @@
   };
 
   // Разблокирует форму объявления
-  var enabledAdForm = function () {
+  var enableAdForm = function () {
     adForm.classList.remove('ad-form--disabled');
     setStateElementsForm(selectsMapFilters, false);
     setStateElementsForm(fieldsetsMapFilters, false);
@@ -146,7 +146,7 @@
   };
 
   // Инициализация начального состояния формы
-  var initAdForm = function () {
+  var initializeAdForm = function () {
     var defaultCoordinatePinMain = window.pin.getCoordinateMapPinMain();
     fieldInputAddress.readOnly = true;
     fieldInputAddress.value = defaultCoordinatePinMain.defaultCentrX + ', ' + defaultCoordinatePinMain.defaultCentrY;
@@ -157,7 +157,7 @@
 
   // Устанавливает дефолтное состояние всех элементов страницы при клике на кнопку "Очистить" в форме AdForm
   var onButtonResetClick = function () {
-    window.map.defaultStatePage();
+    window.map.setDefaultStatePage();
   };
 
   var buttonResetAdForm = adForm.querySelector('.ad-form__reset');
@@ -180,8 +180,8 @@
 
 
   window.form = {
-    configuresAdForm: configuresAdForm,
-    enabledAdForm: enabledAdForm,
-    initAdForm: initAdForm
+    configureAdForm: configureAdForm,
+    enableAdForm: enableAdForm,
+    initializeAdForm: initializeAdForm
   };
 })();

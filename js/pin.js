@@ -95,9 +95,9 @@
       }
       document.removeEventListener('mousemove', onMapPinMainMousemove);
       document.removeEventListener('mouseup', onMapPinMainMouseup);
-      window.map.enabledMap();
-      window.pins.rendersPins();
-      window.form.configuresAdForm();
+      window.map.enableMap();
+      window.pins.renderPins();
+      window.form.configureAdForm();
     };
     document.addEventListener('mousemove', onMapPinMainMousemove);
     document.addEventListener('mouseup', onMapPinMainMouseup);

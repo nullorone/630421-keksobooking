@@ -6,7 +6,7 @@
   var mapPinMain = document.querySelector('.map__pin--main');
 
   // Создает пин
-  var createsPin = function (ad) {
+  var createPin = function (ad) {
     var pinTemplate = document.querySelector('#pin');
     var template = pinTemplate.content.cloneNode(true);
     var mapPin = template.querySelector('.map__pin');
@@ -21,13 +21,13 @@
     // Отрисовывает карточку пина, на который был сделан клик
     mapPin.addEventListener('click', function () {
       mapPin.classList.add('map__pin--active');
-      window.card.addsUseCard(ad);
+      window.card.addUseCard(ad);
     });
 
     // Отрисовывает карточку пина, на котором было сделано нажатие Enter
     mapPin.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ENTER_KEYCODE) {
-        window.card.addsUseCard(ad);
+        window.card.addUseCard(ad);
         mapPin.classList.add('map__pin--active');
       }
     });
@@ -35,18 +35,18 @@
   };
 
   // Генерация меток
-  var generatesSimilarPins = function (adsArray) {
+  var generateSimilarPins = function (adsArray) {
     var fragment = document.createDocumentFragment();
     if (adsArray.length > MAX_ADS) {
       for (var i = 0; i < MAX_ADS; i++) {
         if (adsArray[i].offer) {
-          fragment.appendChild(createsPin(adsArray[i]));
+          fragment.appendChild(createPin(adsArray[i]));
         }
       }
     } else if (adsArray.length <= MAX_ADS) {
       adsArray.forEach(function (element) {
         if (element.offer) {
-          fragment.appendChild(createsPin(element));
+          fragment.appendChild(createPin(element));
         }
       });
     }
@@ -58,17 +58,17 @@
   var mapPins = document.querySelector('.map__pins');
 
   // Отрисовка пинов на карте
-  var showsSimilarPins = function (dataHousing) {
+  var showSimilarPins = function (dataHousing) {
     formFilters.addEventListener('change', function () {
       window.filters.updatePins(dataHousing);
     });
 
-    mapPins.appendChild(generatesSimilarPins(dataHousing));
+    mapPins.appendChild(generateSimilarPins(dataHousing));
   };
 
   var getDataSuccess = function (data) {
     var dataHousing = data;
-    showsSimilarPins(dataHousing);
+    showSimilarPins(dataHousing);
     formFiltersItems.forEach(function (element) {
       element.disabled = 0;
     });
@@ -84,14 +84,14 @@
     });
     window.backend.load(getDataSuccess, getDataError);
   };
-  var rendersPins = function () {
+  var renderPins = function () {
     if (!(mapPinMain.nextElementSibling)) {
       getData();
     }
   };
 
   window.pins = {
-    rendersPins: rendersPins,
-    generatesSimilarPins: generatesSimilarPins
+    renderPins: renderPins,
+    generateSimilarPins: generateSimilarPins
   };
 })();

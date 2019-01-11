@@ -58,7 +58,7 @@
     }
   };
 
-  var removedPins = function () {
+  var removePins = function () {
     while (mapPinMain.nextElementSibling) {
       mapPinMain.nextElementSibling.remove();
     }
@@ -72,8 +72,8 @@
         && guestsHousingChange(element)
         && featuresHousingChange(element);
     });
-    removedPins();
-    mapPins.appendChild(window.pins.generatesSimilarPins(filteredData));
+    removePins();
+    mapPins.appendChild(window.pins.generateSimilarPins(filteredData));
   };
 
   var timeoutUpdatePins;
@@ -82,7 +82,7 @@
       window.clearTimeout(timeoutUpdatePins);
     }
     timeoutUpdatePins = window.setTimeout(function () {
-      window.card.removesCard();
+      window.card.removeCard();
       getUpdatePins(data);
     }, DEBOUNCE_DELAY);
   };
