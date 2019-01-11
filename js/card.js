@@ -20,9 +20,9 @@
   // Генерирует список преимуществ жилья
   var generatesFeaturesList = function (ad) {
     var featuresList = [];
-    for (var i = 0; i < ad.offer.features.length; i++) {
-      featuresList.push('<li class="popup__feature popup__feature--' + ad.offer.features[i] + '"></li>');
-    }
+    ad.offer.features.forEach(function (element) {
+      featuresList.push('<li class="popup__feature popup__feature--' + element + '"></li>');
+    });
     return featuresList;
   };
 
@@ -37,9 +37,9 @@
   // Генерирует фотографии жилья
   var generatesPhotoList = function (ad) {
     var photoList = [];
-    for (var i = 0; i < ad.offer.photos.length; i++) {
-      photoList.push('<img src="' + ad.offer.photos[i] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
-    }
+    ad.offer.photos.forEach(function (element) {
+      photoList.push('<img src="' + element + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
+    });
     return photoList;
   };
 
@@ -54,12 +54,12 @@
   // Скрывает айтемы карточки, если в них не хватает информации
   var getFilteredElement = function (element) {
     var descriptionsElement = ['avatar', 'title', 'address', 'price', 'type', 'features', 'description', 'photos'];
-    for (var i = 0; i < descriptionsElement.length; i++) {
-      var item = element.querySelector('[class*=' + descriptionsElement[i] + ']');
+    descriptionsElement.forEach(function (currentElement) {
+      var item = element.querySelector('[class*=' + currentElement + ']');
       if (item.children.length === 0 && item.innerText === false) {
         item.hidden = true;
       }
-    }
+    });
   };
 
   // Создает карточку с информацией о жилье
