@@ -2,8 +2,12 @@
 
 (function () {
   var HEIGHT_TIP_MAP_PIN_MAIN = 15;
-  var TOP_SIDE_VIEWPORT = 130; // Минимальное положение пина от верхнего края вьюпорта с учетом высоты пина
-  var BOTTOM_SIDE_VIEWPORT = 630; // Минимальное положение пина от нижнего края вьюпорта с учетом высоты пина
+
+  var PositionMainPin = {
+    TOP: 130,
+    BOTTOM: 630
+  };
+
   var mapPinMain = document.querySelector('.map__pin--main');
   var fieldInputAddress = document.querySelector('#address');
   var map = document.querySelector('.map');
@@ -60,9 +64,9 @@
       };
 
       var limitsShift = {
-        top: mapParameters.top + TOP_SIDE_VIEWPORT - mapPinMain.offsetHeight - HEIGHT_TIP_MAP_PIN_MAIN + 1,
+        top: mapParameters.top + PositionMainPin.TOP - mapPinMain.offsetHeight - HEIGHT_TIP_MAP_PIN_MAIN + 1,
         right: mapParameters.right - mapPinMain.offsetWidth,
-        bottom: mapParameters.top + BOTTOM_SIDE_VIEWPORT - HEIGHT_TIP_MAP_PIN_MAIN - mapPinMain.offsetHeight - 1,
+        bottom: mapParameters.top + PositionMainPin.BOTTOM - HEIGHT_TIP_MAP_PIN_MAIN - mapPinMain.offsetHeight - 1,
         left: mapParameters.left
       };
 
