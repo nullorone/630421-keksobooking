@@ -1,9 +1,6 @@
 'use strict';
 (function () {
 // Обработка формы подачи объявления
-  var MIN_PRICE_FOR_FLAT = 1000;
-  var MIN_PRICE_FOR_HOUSE = 5000;
-  var MIN_PRICE_FOR_PALACE = 10000;
   var MIN_LENGTH_TITLE_AD = 30;
   var MAX_LENGTH_TITLE_AD = 30;
   var MAX_PRICE_HOUSING = 1000000;
@@ -12,9 +9,9 @@
   // Минимальные цены для типов жилья
   var PriceHousing = {
     bungalo: 0,
-    flat: MIN_PRICE_FOR_FLAT,
-    house: MIN_PRICE_FOR_HOUSE,
-    palace: MIN_PRICE_FOR_PALACE
+    flat: 1000,
+    house: 5000,
+    palace: 10000
   };
 
   var adForm = document.querySelector('.ad-form');
