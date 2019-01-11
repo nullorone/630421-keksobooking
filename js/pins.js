@@ -59,7 +59,6 @@
 
   // Отрисовка пинов на карте
   var showsSimilarPins = function (dataHousing) {
-
     formFilters.addEventListener('change', function () {
       window.filters.updatePins(dataHousing);
     });
