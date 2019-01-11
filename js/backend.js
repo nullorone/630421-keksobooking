@@ -5,8 +5,8 @@
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
 
   var StatusCodes = {
-    success: 200,
-    error: 400
+    SUCCESS: 200,
+    ERROR: 400
   };
 
   var savesData = function (data, onLoad, onError) {
@@ -15,9 +15,9 @@
     xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === StatusCodes.success) {
+      if (xhr.status === StatusCodes.SUCCESS) {
         onLoad('success');
-      } else if (xhr.status >= StatusCodes.error) {
+      } else if (xhr.status >= StatusCodes.ERROR) {
         onError('error');
       }
     });
@@ -42,9 +42,9 @@
     xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === StatusCodes.success) {
+      if (xhr.status === StatusCodes.SUCCESS) {
         onLoad(xhr.response);
-      } else if (xhr.status >= StatusCodes.error) {
+      } else if (xhr.status >= StatusCodes.ERROR) {
         onError(xhr.status);
       }
     });
