@@ -56,22 +56,22 @@
   var formFilters = document.querySelector('.map__filters');
   var formFiltersItems = formFilters.querySelectorAll('select, input');
   var mapPins = document.querySelector('.map__pins');
-  var formFiltersData;
+  var formFiltersAds;
 
   var onFormFiltersChange = function () {
-    window.filters.updatePins(formFiltersData);
+    window.filters.updatePins(formFiltersAds);
   };
 
   // Отрисовка пинов на карте
-  var showSimilarPins = function (dataHousing) {
-    formFiltersData = dataHousing.slice();
+  var showSimilarPins = function (ads) {
+    formFiltersAds = ads;
     formFilters.addEventListener('change', onFormFiltersChange);
-    mapPins.appendChild(generateSimilarPins(dataHousing));
+    mapPins.appendChild(generateSimilarPins(ads));
   };
 
-  var getDataSuccess = function (data) {
-    var dataHousing = data;
-    showSimilarPins(dataHousing);
+  var getDataSuccess = function (ads) {
+    var loadedAds = ads.slice();
+    showSimilarPins(loadedAds);
     formFiltersItems.forEach(function (element) {
       element.disabled = 0;
     });

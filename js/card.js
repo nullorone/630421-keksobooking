@@ -8,13 +8,13 @@
 
   // Получает перевод английского названия типа жилья
   var getRussianTypeHousing = function (type) {
-    var TypesHousing = {
+    var typesHousing = {
       'flat': 'Квартира',
       'bungalo': 'Бунгало',
       'house': 'Дом',
       'palace': 'Дворец'
     };
-    return TypesHousing[type];
+    return typesHousing[type];
   };
 
   // Генерирует список преимуществ жилья
@@ -72,8 +72,8 @@
     ad.offer.title;
     cardElement.querySelector('.popup__text--address').textContent =
     ad.offer.address;
-    cardElement.querySelector('.popup__text--price').innerHTML =
-    ad.offer.price + '&#x20bd;<span>/ночь</span>';
+    cardElement.querySelector('.popup__text--price').textContent =
+    ad.offer.price + '₽/ночь';
     cardElement.querySelector('.popup__type').textContent = getRussianTypeHousing(ad.offer.type);
     cardElement.querySelector('.popup__text--capacity').textContent =
       ad.offer.rooms +

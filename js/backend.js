@@ -12,7 +12,7 @@
     ERROR: 400
   };
 
-  var saveData = function (data, onLoad, onError) {
+  var saveAd = function (ad, onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
     xhr.timeout = TIMEOUT;
@@ -34,10 +34,10 @@
     });
 
     xhr.open('POST', UrlRequest.SAVE);
-    xhr.send(data);
+    xhr.send(ad);
   };
 
-  var loadData = function (onLoad, onError) {
+  var loadAds = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
@@ -61,7 +61,7 @@
   };
 
   window.backend = {
-    save: saveData,
-    load: loadData
+    save: saveAd,
+    load: loadAds
   };
 })();
