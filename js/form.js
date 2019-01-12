@@ -31,16 +31,19 @@
   var selectsMapFilters = mapFilters.querySelectorAll('select');
   var fieldsetsMapFilters = mapFilters.querySelectorAll('fieldset');
 
-  var changeTimeAdForm = function (changeableSelect, changedSelect) {
-    changeableSelect.addEventListener('change', function (evt) {
-      changedSelect.children[evt.target.selectedIndex].selected = true;
-    });
+  var onTimeAdChange = function (evt) {
+    selectTimeoutAdForm.children[evt.target.selectedIndex].selected = true;
+    selectTimeinAdForm.children[evt.target.selectedIndex].selected = true;
+  };
+
+  var changeTimeAdForm = function (changeableSelect) {
+    changeableSelect.addEventListener('change', onTimeAdChange);
   };
 
   var configureAdForm = function () {
     adForm.action = 'https://js.dump.academy/keksobooking';
-    changeTimeAdForm(selectTimeinAdForm, selectTimeoutAdForm);
-    changeTimeAdForm(selectTimeoutAdForm, selectTimeinAdForm);
+    changeTimeAdForm(selectTimeinAdForm);
+    changeTimeAdForm(selectTimeoutAdForm);
     configureInputTitle();
     configureInputPrice();
     configureCapacity();
@@ -141,6 +144,12 @@
     setStateElementsForm(selectsMapFilters, true);
     setStateElementsForm(fieldsetsMapFilters, true);
     setStateElementsForm(fieldsetsAdForm, true);
+    selectTypeHousingAdForm.removeEventListener('change', onInputTypeHousingChange);
+    selectRoomNumberAdForm.removeEventListener('change', onInputRoomNumberChange);
+    buttonResetAdForm.removeEventListener('click', onButtonResetClick);
+    adForm.removeEventListener('submit', onButtonAdFormSubmitClick);
+    selectTimeoutAdForm.removeEventListener('change', onTimeAdChange);
+    selectTimeinAdForm.removeEventListener('change', onTimeAdChange);
   };
 
   // Устанавливает дефолтное состояние всех элементов страницы при клике на кнопку "Очистить" в форме AdForm
