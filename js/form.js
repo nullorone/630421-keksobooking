@@ -1,20 +1,19 @@
 'use strict';
 (function () {
 // Обработка формы подачи объявления
-  var MIN_PRICE_FOR_FLAT = 1000;
-  var MIN_PRICE_FOR_HOUSE = 5000;
-  var MIN_PRICE_FOR_PALACE = 10000;
-  var MIN_LENGTH_TITLE_AD = 30;
-  var MAX_LENGTH_TITLE_AD = 30;
   var MAX_PRICE_HOUSING = 1000000;
   var DEFAULT_NUMBER_GUESTS = '1';
 
+  var LengthTitleAd = {
+    MIN: 30,
+    MAX: 100
+  };
   // Минимальные цены для типов жилья
-  var priceHousing = {
-    bungalo: 0,
-    flat: MIN_PRICE_FOR_FLAT,
-    house: MIN_PRICE_FOR_HOUSE,
-    palace: MIN_PRICE_FOR_PALACE
+  var PriceHousing = {
+    BUNGALO: 0,
+    FLAT: 1000,
+    HOUSE: 5000,
+    PALACE: 10000
   };
 
   var adForm = document.querySelector('.ad-form');
@@ -32,72 +31,74 @@
   var selectsMapFilters = mapFilters.querySelectorAll('select');
   var fieldsetsMapFilters = mapFilters.querySelectorAll('fieldset');
 
-  var changesTimeAdForm = function (changeableSelect, changedSelect) {
-    changeableSelect.addEventListener('change', function (evt) {
-      changedSelect.children[evt.target.selectedIndex].selected = true;
-    });
+  var onTimeAdChange = function (evt) {
+    selectTimeoutAdForm.children[evt.target.selectedIndex].selected = true;
+    selectTimeinAdForm.children[evt.target.selectedIndex].selected = true;
   };
 
-  var configuresAdForm = function () {
+  var changeTimeAdForm = function (changeableSelect) {
+    changeableSelect.addEventListener('change', onTimeAdChange);
+  };
+
+  var configureAdForm = function () {
     adForm.action = 'https://js.dump.academy/keksobooking';
-    changesTimeAdForm(selectTimeinAdForm, selectTimeoutAdForm);
-    changesTimeAdForm(selectTimeoutAdForm, selectTimeinAdForm);
-    configuresInputTitle();
-    configuresInputPrice();
-    configuresCapacity();
+    changeTimeAdForm(selectTimeinAdForm);
+    changeTimeAdForm(selectTimeoutAdForm);
+    configureInputTitle();
+    configureInputPrice();
+    configureCapacity();
   };
 
-  var configuresInputTitle = function () {
+  var configureInputTitle = function () {
     if (inputTitleAdForm.type !== 'text') {
       inputTitleAdForm.type = 'text';
     }
-    inputTitleAdForm.minLength = MIN_LENGTH_TITLE_AD;
-    inputTitleAdForm.maxLength = MAX_LENGTH_TITLE_AD;
+    inputTitleAdForm.minLength = LengthTitleAd.MIN;
+    inputTitleAdForm.maxLength = LengthTitleAd.MAX;
     inputTitleAdForm.required = true;
   };
 
-  var configuresInputPrice = function () {
+  var configureInputPrice = function () {
     if (inputPriceAdForm.type !== 'number') {
       inputPriceAdForm.type = 'number';
     }
-    inputPriceAdForm.min = priceHousing.flat;
-    inputPriceAdForm.placeholder = priceHousing.flat;
+    inputPriceAdForm.min = PriceHousing.FLAT;
+    inputPriceAdForm.placeholder = PriceHousing.FLAT;
     inputPriceAdForm.max = MAX_PRICE_HOUSING;
     inputPriceAdForm.required = true;
   };
 
-  var configuresCapacity = function () {
-    for (var i = 0; i < optionsCapacityAdForm.length; i++) {
-      optionsCapacityAdForm[i].disabled = true;
+  var configureCapacity = function () {
+    optionsCapacityAdForm.forEach(function (element) {
+      element.disabled = true;
 
-      if (optionsCapacityAdForm[i].value === DEFAULT_NUMBER_GUESTS) {
-        optionsCapacityAdForm[i].selected = true;
-        optionsCapacityAdForm[i].disabled = false;
+      if (element.value === DEFAULT_NUMBER_GUESTS) {
+        element.selected = true;
+        element.disabled = false;
       }
-    }
+    });
   };
 
   // Изменяет минимальное значение и placeholder у инпута "Цена за ночь"
   var changePriceNight = function (evt) {
     var valueTypeHousing = evt.target.value;
-    inputPriceAdForm.min = priceHousing[valueTypeHousing];
-    inputPriceAdForm.placeholder = priceHousing[valueTypeHousing];
+    valueTypeHousing = valueTypeHousing.toUpperCase();
+    inputPriceAdForm.min = PriceHousing[valueTypeHousing];
+    inputPriceAdForm.placeholder = PriceHousing[valueTypeHousing];
   };
 
   var onInputTypeHousingChange = function (evt) {
     changePriceNight(evt);
   };
 
-  selectTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
-
   // Получает объект с элементами сортированными в порядке возрастания по их соотношению со значениями в атрибутах
   var getObjectOptionsCapacity = function () {
     var objectCapacity = {};
-    for (var i = 0; i < optionsCapacityAdForm.length; i++) {
-      var currentValue = optionsCapacityAdForm[i];
+    optionsCapacityAdForm.forEach(function (element) {
+      var currentValue = element;
       var currentKey = currentValue.value;
       objectCapacity[currentKey] = currentValue;
-    }
+    });
     return objectCapacity;
   };
   var optionsCapacity = getObjectOptionsCapacity();
@@ -112,9 +113,9 @@
 
   // Добавляет состояние disabled пунктам, которые не соответствуют выбранному количеству комнат
   var setStateInputNumberPlaces = function (evt) {
-    for (var i = 0; i < optionsCapacityAdForm.length; i++) {
-      optionsCapacityAdForm[i].disabled = true;
-    }
+    optionsCapacityAdForm.forEach(function (element) {
+      element.disabled = true;
+    });
 
     var valueCapacity = evt.target.value;
 
@@ -128,40 +129,36 @@
     setStateInputNumberPlaces(evt);
   };
 
-  selectRoomNumberAdForm.addEventListener('change', onInputRoomNumberChange);
-
   // Меняет состояние атрибута disabled у коллекции элементов
   var setStateElementsForm = function (elements, state) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].disabled = state;
-    }
-  };
-
-  // Разблокирует форму объявления
-  var enabledAdForm = function () {
-    adForm.classList.remove('ad-form--disabled');
-    setStateElementsForm(selectsMapFilters, false);
-    setStateElementsForm(fieldsetsMapFilters, false);
-    setStateElementsForm(fieldsetsAdForm, false);
+    elements.forEach(function (element) {
+      element.disabled = state;
+    });
   };
 
   // Инициализация начального состояния формы
-  var initAdForm = function () {
+  var initializeAdForm = function () {
     var defaultCoordinatePinMain = window.pin.getCoordinateMapPinMain();
     fieldInputAddress.readOnly = true;
     fieldInputAddress.value = defaultCoordinatePinMain.defaultCentrX + ', ' + defaultCoordinatePinMain.defaultCentrY;
     setStateElementsForm(selectsMapFilters, true);
     setStateElementsForm(fieldsetsMapFilters, true);
     setStateElementsForm(fieldsetsAdForm, true);
+    selectTypeHousingAdForm.removeEventListener('change', onInputTypeHousingChange);
+    selectRoomNumberAdForm.removeEventListener('change', onInputRoomNumberChange);
+    buttonResetAdForm.removeEventListener('click', onButtonResetClick);
+    adForm.removeEventListener('submit', onButtonAdFormSubmitClick);
+    selectTimeoutAdForm.removeEventListener('change', onTimeAdChange);
+    selectTimeinAdForm.removeEventListener('change', onTimeAdChange);
+    window.pins.removeHandlerFormFilters();
   };
 
   // Устанавливает дефолтное состояние всех элементов страницы при клике на кнопку "Очистить" в форме AdForm
   var onButtonResetClick = function () {
-    window.map.defaultStatePage();
+    window.map.setDefaultStatePage();
   };
 
   var buttonResetAdForm = adForm.querySelector('.ad-form__reset');
-  buttonResetAdForm.addEventListener('click', onButtonResetClick);
 
   var sendDataSuccess = function (status) {
     window.messages.generatesMessageNode(status);
@@ -176,12 +173,21 @@
     window.backend.save(new FormData(adForm), sendDataSuccess, sendDataError);
   };
 
-  adForm.addEventListener('submit', onButtonAdFormSubmitClick);
-
+  // Разблокирует форму объявления
+  var enableAdForm = function () {
+    adForm.classList.remove('ad-form--disabled');
+    setStateElementsForm(selectsMapFilters, false);
+    setStateElementsForm(fieldsetsMapFilters, false);
+    setStateElementsForm(fieldsetsAdForm, false);
+    selectTypeHousingAdForm.addEventListener('change', onInputTypeHousingChange);
+    selectRoomNumberAdForm.addEventListener('change', onInputRoomNumberChange);
+    buttonResetAdForm.addEventListener('click', onButtonResetClick);
+    adForm.addEventListener('submit', onButtonAdFormSubmitClick);
+  };
 
   window.form = {
-    configuresAdForm: configuresAdForm,
-    enabledAdForm: enabledAdForm,
-    initAdForm: initAdForm
+    configureAdForm: configureAdForm,
+    enableAdForm: enableAdForm,
+    initializeAdForm: initializeAdForm
   };
 })();

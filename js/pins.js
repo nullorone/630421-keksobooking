@@ -6,7 +6,7 @@
   var mapPinMain = document.querySelector('.map__pin--main');
 
   // Создает пин
-  var creatingPin = function (ad) {
+  var createPin = function (ad) {
     var pinTemplate = document.querySelector('#pin');
     var template = pinTemplate.content.cloneNode(true);
     var mapPin = template.querySelector('.map__pin');
@@ -20,35 +20,33 @@
 
     // Отрисовывает карточку пина, на который был сделан клик
     mapPin.addEventListener('click', function () {
-      window.card.removesCard();
-      window.card.renderCard(ad);
-      window.card.closesCard();
+      mapPin.classList.add('map__pin--active');
+      window.card.addUseCard(ad);
     });
 
     // Отрисовывает карточку пина, на котором было сделано нажатие Enter
     mapPin.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ENTER_KEYCODE) {
-        window.card.removesCard();
-        window.card.renderCard(ad);
-        window.card.closesCard();
+        window.card.addUseCard(ad);
+        mapPin.classList.add('map__pin--active');
       }
     });
     return template;
   };
 
   // Генерация меток
-  var generateSimilarPins = function (adsArray) {
+  var generateSimilarPins = function (ads) {
     var fragment = document.createDocumentFragment();
-    if (adsArray.length > MAX_ADS) {
+    if (ads.length > MAX_ADS) {
       for (var i = 0; i < MAX_ADS; i++) {
-        if (adsArray[i].offer) {
-          fragment.appendChild(creatingPin(adsArray[i]));
+        if (ads[i].offer) {
+          fragment.appendChild(createPin(ads[i]));
         }
       }
-    } else if (adsArray.length <= MAX_ADS) {
-      adsArray.forEach(function (element) {
+    } else if (ads.length <= MAX_ADS) {
+      ads.forEach(function (element) {
         if (element.offer) {
-          fragment.appendChild(creatingPin(element));
+          fragment.appendChild(createPin(element));
         }
       });
     }
@@ -58,14 +56,16 @@
   var formFilters = document.querySelector('.map__filters');
   var formFiltersItems = formFilters.querySelectorAll('select, input');
   var mapPins = document.querySelector('.map__pins');
+  var formFiltersData;
+
+  var onFormFiltersChange = function () {
+    window.filters.updatePins(formFiltersData);
+  };
 
   // Отрисовка пинов на карте
   var showSimilarPins = function (dataHousing) {
-
-    formFilters.addEventListener('change', function () {
-      window.filters.updatePins(dataHousing);
-    });
-
+    formFiltersData = dataHousing.slice();
+    formFilters.addEventListener('change', onFormFiltersChange);
     mapPins.appendChild(generateSimilarPins(dataHousing));
   };
 
@@ -93,8 +93,13 @@
     }
   };
 
+  var removeHandlerFormFilters = function () {
+    formFilters.removeEventListener('change', onFormFiltersChange);
+  };
+
   window.pins = {
     renderPins: renderPins,
-    generateSimilarPins: generateSimilarPins
+    generateSimilarPins: generateSimilarPins,
+    removeHandlerFormFilters: removeHandlerFormFilters
   };
 })();

@@ -1,25 +1,26 @@
 'use strict';
 (function () {
   var TIMEOUT = 10000;
-  var URL_SAVE = 'https://js.dump.academy/keksobooking';
-  var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
 
-  var statusCodes = {
-    success: 200,
-    error: 400
+  var UrlRequest = {
+    SAVE: 'https://js.dump.academy/keksobooking',
+    LOAD: 'https://js.dump.academy/keksobooking/data'
   };
 
-  var savesData = function (data, onLoad, onError) {
+  var StatusCodes = {
+    SUCCESS: 200,
+    ERROR: 400
+  };
+
+  var saveData = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
     xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === statusCodes.success) {
-
-
+      if (xhr.status === StatusCodes.SUCCESS) {
         onLoad('success');
-      } else if (xhr.status >= statusCodes.error) {
+      } else if (xhr.status >= StatusCodes.ERROR) {
         onError('error');
       }
     });
@@ -32,11 +33,11 @@
       onError('error');
     });
 
-    xhr.open('POST', URL_SAVE);
+    xhr.open('POST', UrlRequest.SAVE);
     xhr.send(data);
   };
 
-  var loadingData = function (onLoad, onError) {
+  var loadData = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
@@ -44,9 +45,9 @@
     xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === statusCodes.success) {
+      if (xhr.status === StatusCodes.SUCCESS) {
         onLoad(xhr.response);
-      } else if (xhr.status >= statusCodes.error) {
+      } else if (xhr.status >= StatusCodes.ERROR) {
         onError(xhr.status);
       }
     });
@@ -55,12 +56,12 @@
       onError('timeout');
     });
 
-    xhr.open('GET', URL_LOAD);
+    xhr.open('GET', UrlRequest.LOAD);
     xhr.send();
   };
 
   window.backend = {
-    save: savesData,
-    load: loadingData
+    save: saveData,
+    load: loadData
   };
 })();
