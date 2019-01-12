@@ -6,28 +6,32 @@
 
   var mainNodeElement = document.querySelector('main');
 
-  var generatesMessageNode = function (status) {
-    var messageTemplate = document.querySelector('#' + status);
-    var messageElement = messageTemplate.content.cloneNode(true);
+  var messageTemplate = {
+    'success': document.querySelector('#success'),
+    'error': document.querySelector('#error')
+  };
+
+  var generateMessageNode = function (status) {
+    var messageElement = messageTemplate[status].content.cloneNode(true);
     mainNodeElement.appendChild(messageElement);
 
-    var removesMessageNode = function () {
+    var removeMessageNode = function () {
       if (mainNodeElement.lastElementChild.className === 'success') {
         mainNodeElement.removeChild(mainNodeElement.lastElementChild);
-        window.map.defaultStatePage();
+        window.map.setDefaultStatePage();
       } else if (mainNodeElement.lastElementChild.className === 'error') {
         mainNodeElement.removeChild(mainNodeElement.lastElementChild);
       }
     };
 
     var onMainNodeElementClick = function () {
-      removesMessageNode();
+      removeMessageNode();
       mainNodeElement.removeEventListener('click', onMainNodeElementClick);
     };
 
     var onMessageNodeKeydownEsc = function (evt) {
       if (evt.keyCode === ESC_KEYCODE) {
-        removesMessageNode();
+        removeMessageNode();
         mainNodeElement.removeEventListener('keydown', onMessageNodeKeydownEsc);
       }
     };
@@ -37,7 +41,7 @@
   };
 
   window.messages = {
-    generatesMessageNode: generatesMessageNode
+    generateMessageNode: generateMessageNode
   };
 })();
 

@@ -9,53 +9,43 @@
 
   var mapPinMain = document.querySelector('.map__pin--main');
   var mapPins = document.querySelector('.map__pins');
+  var filterType = document.querySelector('#housing-type');
+  var filterRooms = document.querySelector('#housing-rooms');
+  var filterPrice = document.querySelector('#housing-price');
+  var filterGuests = document.querySelector('#housing-guests');
+  var filterFeaturesNodeList = document.querySelectorAll('#housing-features input');
+  var filterArray = Array.from(filterFeaturesNodeList);
 
-  var typeHousingChange = function (element) {
-    var filterType = document.querySelector('#housing-type').value;
-    return element.offer.type === filterType || filterType === 'any';
+  var typeHousingChange = function (ad) {
+    return ad.offer.type === filterType.value || filterType.value === 'any';
   };
 
-  var priceHousingChange = function (element) {
-    var filterPrice = document.querySelector('#housing-price').value;
+  var priceHousingChange = function (ad) {
     var priceToOptionsPrices = {
-      'low': (element.offer.price < PriceFilter.LOW),
-      'middle': (element.offer.price >= PriceFilter.LOW && element.offer.price <= PriceFilter.HIGH),
-      'high': (element.offer.price > PriceFilter.HIGH)
+      'low': (ad.offer.price < PriceFilter.LOW),
+      'middle': (ad.offer.price >= PriceFilter.LOW && ad.offer.price <= PriceFilter.HIGH),
+      'high': (ad.offer.price > PriceFilter.HIGH)
     };
-    return priceToOptionsPrices[filterPrice] || filterPrice === 'any';
+    return priceToOptionsPrices[filterPrice.value] || filterPrice.value === 'any';
   };
 
-  var roomsHousingChange = function (element) {
-    var filterRooms = document.querySelector('#housing-rooms').value;
-    if (filterRooms !== 'any') {
-      filterRooms = Number(filterRooms);
-    }
-    return element.offer.rooms === filterRooms || filterRooms === 'any';
+  var roomsHousingChange = function (ad) {
+    return ad.offer.rooms === Number(filterRooms.value) || filterRooms.value === 'any';
   };
 
-  var guestsHousingChange = function (element) {
-    var filterGuests = document.querySelector('#housing-guests').value;
-    if (filterGuests !== 'any') {
-      filterGuests = Number(filterGuests);
-    }
-    return element.offer.guests === filterGuests || filterGuests === 'any';
+  var guestsHousingChange = function (ad) {
+    return ad.offer.guests === Number(filterGuests.value) || filterGuests.value === 'any';
   };
 
-  var featuresHousingChange = function (element) {
-    var filterFeatures = document.querySelectorAll('#housing-features input:checked');
-    if (filterFeatures.length !== 0) {
-      var compare = false;
-      element.offer.features.forEach(function (currentElement) {
-        filterFeatures.forEach(function (item) {
-          if (currentElement === item.value) {
-            compare = true;
-          }
-        });
+  var featuresHousingChange = function (ad) {
+    var filterFeatures = filterArray.filter(function (element) {
+      return element.checked;
+    });
+    return filterFeatures.length === 0 || filterFeatures.every(function (item) {
+      return ad.offer.features.find(function (currentElement) {
+        return item.value === currentElement;
       });
-      return compare;
-    } else {
-      return true;
-    }
+    });
   };
 
   var removePins = function () {
@@ -64,26 +54,26 @@
     }
   };
 
-  var getUpdatePins = function (data) {
-    var filteredData = data.filter(function (element) {
-      return typeHousingChange(element)
-        && priceHousingChange(element)
-        && roomsHousingChange(element)
-        && guestsHousingChange(element)
-        && featuresHousingChange(element);
+  var getUpdatePins = function (ads) {
+    var filteredAds = ads.filter(function (ad) {
+      return typeHousingChange(ad)
+        && priceHousingChange(ad)
+        && roomsHousingChange(ad)
+        && guestsHousingChange(ad)
+        && featuresHousingChange(ad);
     });
     removePins();
-    mapPins.appendChild(window.pins.generateSimilarPins(filteredData));
+    mapPins.appendChild(window.pins.generateSimilarPins(filteredAds));
   };
 
   var timeoutUpdatePins;
-  var updatePins = function (data) {
+  var updatePins = function (ads) {
     if (timeoutUpdatePins) {
       window.clearTimeout(timeoutUpdatePins);
     }
     timeoutUpdatePins = window.setTimeout(function () {
       window.card.removeCard();
-      getUpdatePins(data);
+      getUpdatePins(ads);
     }, DEBOUNCE_DELAY);
   };
 

@@ -4,17 +4,19 @@
   var ESC_KEYCODE = 27;
 
   var map = document.querySelector('.map');
+  var cardTemplate = document.querySelector('#card');
+  var adsFilter = document.querySelector('.map__filters-container');
   var mapPinCurrent;
 
   // Получает перевод английского названия типа жилья
   var getRussianTypeHousing = function (type) {
-    var TypesHousing = {
+    var typesHousing = {
       'flat': 'Квартира',
       'bungalo': 'Бунгало',
       'house': 'Дом',
       'palace': 'Дворец'
     };
-    return TypesHousing[type];
+    return typesHousing[type];
   };
 
   // Генерирует список преимуществ жилья
@@ -64,7 +66,6 @@
 
   // Создает карточку с информацией о жилье
   var createCardHousing = function (ad) {
-    var cardTemplate = document.querySelector('#card');
     var cardElement = cardTemplate.content.cloneNode(true);
     cardElement.querySelector('.popup__avatar').src =
     ad.author.avatar;
@@ -72,8 +73,8 @@
     ad.offer.title;
     cardElement.querySelector('.popup__text--address').textContent =
     ad.offer.address;
-    cardElement.querySelector('.popup__text--price').innerHTML =
-    ad.offer.price + '&#x20bd;<span>/ночь</span>';
+    cardElement.querySelector('.popup__text--price').textContent =
+    ad.offer.price + '₽/ночь';
     cardElement.querySelector('.popup__type').textContent = getRussianTypeHousing(ad.offer.type);
     cardElement.querySelector('.popup__text--capacity').textContent =
       ad.offer.rooms +
@@ -101,7 +102,6 @@
 
   // Вставляет карточку объявления перед элементом фильтрации объявлений
   var showCardHousing = function (card) {
-    var adsFilter = document.querySelector('.map__filters-container');
     map.insertBefore(card, adsFilter);
   };
 
