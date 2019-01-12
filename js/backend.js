@@ -53,7 +53,7 @@
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('timeout');
+      onError('error');
     });
 
     xhr.open('GET', UrlRequest.LOAD);

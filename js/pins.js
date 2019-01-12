@@ -4,6 +4,10 @@
   var MAX_ADS = 5;
 
   var mapPinMain = document.querySelector('.map__pin--main');
+  var formFilters = document.querySelector('.map__filters');
+  var formFiltersItems = formFilters.querySelectorAll('select, input');
+  var mapPins = document.querySelector('.map__pins');
+  var formFiltersAds;
 
   // Создает пин
   var createPin = function (ad) {
@@ -53,43 +57,38 @@
     return fragment;
   };
 
-  var formFilters = document.querySelector('.map__filters');
-  var formFiltersItems = formFilters.querySelectorAll('select, input');
-  var mapPins = document.querySelector('.map__pins');
-  var formFiltersAds;
-
   var onFormFiltersChange = function () {
     window.filters.updatePins(formFiltersAds);
   };
 
   // Отрисовка пинов на карте
   var showSimilarPins = function (ads) {
-    formFiltersAds = ads;
+    formFiltersAds = ads.slice();
     formFilters.addEventListener('change', onFormFiltersChange);
     mapPins.appendChild(generateSimilarPins(ads));
   };
 
-  var getDataSuccess = function (ads) {
-    var loadedAds = ads.slice();
-    showSimilarPins(loadedAds);
+  var getAdsSuccess = function (loadedAds) {
+    var ads = loadedAds;
+    showSimilarPins(ads);
     formFiltersItems.forEach(function (element) {
       element.disabled = 0;
     });
   };
 
-  var getDataError = function (status) {
-    window.messages.generatesMessageNode(status);
+  var getAdsError = function (status) {
+    window.messages.generateMessageNode(status);
   };
 
-  var getData = function () {
+  var getAds = function () {
     formFiltersItems.forEach(function (element) {
       element.disabled = 1;
     });
-    window.backend.load(getDataSuccess, getDataError);
+    window.backend.load(getAdsSuccess, getAdsError);
   };
   var renderPins = function () {
     if (!(mapPinMain.nextElementSibling)) {
-      getData();
+      getAds();
     }
   };
 

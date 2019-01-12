@@ -9,45 +9,41 @@
 
   var mapPinMain = document.querySelector('.map__pin--main');
   var mapPins = document.querySelector('.map__pins');
+  var filterType = document.querySelector('#housing-type');
+  var filterRooms = document.querySelector('#housing-rooms');
+  var filterPrice = document.querySelector('#housing-price');
+  var filterGuests = document.querySelector('#housing-guests');
+  var filterFeaturesNodeList = document.querySelectorAll('#housing-features input');
+  var filterArray = Array.from(filterFeaturesNodeList);
 
   var typeHousingChange = function (ad) {
-    var filterType = document.querySelector('#housing-type').value;
-    return ad.offer.type === filterType || filterType === 'any';
+    return ad.offer.type === filterType.value || filterType.value === 'any';
   };
 
   var priceHousingChange = function (ad) {
-    var filterPrice = document.querySelector('#housing-price').value;
     var priceToOptionsPrices = {
       'low': (ad.offer.price < PriceFilter.LOW),
       'middle': (ad.offer.price >= PriceFilter.LOW && ad.offer.price <= PriceFilter.HIGH),
       'high': (ad.offer.price > PriceFilter.HIGH)
     };
-    return priceToOptionsPrices[filterPrice] || filterPrice === 'any';
+    return priceToOptionsPrices[filterPrice.value] || filterPrice.value === 'any';
   };
 
   var roomsHousingChange = function (ad) {
-    var filterRooms = document.querySelector('#housing-rooms').value;
-    if (filterRooms !== 'any') {
-      filterRooms = Number(filterRooms);
-    }
-    return ad.offer.rooms === filterRooms || filterRooms === 'any';
+    return ad.offer.rooms === Number(filterRooms.value) || filterRooms.value === 'any';
   };
 
   var guestsHousingChange = function (ad) {
-    var filterGuests = document.querySelector('#housing-guests').value;
-    if (filterGuests !== 'any') {
-      filterGuests = Number(filterGuests);
-    }
-    return ad.offer.guests === filterGuests || filterGuests === 'any';
+    return ad.offer.guests === Number(filterGuests.value) || filterGuests.value === 'any';
   };
 
   var featuresHousingChange = function (ad) {
-    var filterFeaturesNodeList = document.querySelectorAll('#housing-features input:checked');
-    var filterFeatures = Array.from(filterFeaturesNodeList);
-
+    var filterFeatures = filterArray.filter(function (element) {
+      return element.checked;
+    });
     return filterFeatures.length === 0 || filterFeatures.every(function (item) {
-      return ad.offer.features.find(function (feature) {
-        return item.value === feature;
+      return ad.offer.features.find(function (currentElement) {
+        return item.value === currentElement;
       });
     });
   };

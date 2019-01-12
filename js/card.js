@@ -4,6 +4,8 @@
   var ESC_KEYCODE = 27;
 
   var map = document.querySelector('.map');
+  var cardTemplate = document.querySelector('#card');
+  var adsFilter = document.querySelector('.map__filters-container');
   var mapPinCurrent;
 
   // Получает перевод английского названия типа жилья
@@ -64,7 +66,6 @@
 
   // Создает карточку с информацией о жилье
   var createCardHousing = function (ad) {
-    var cardTemplate = document.querySelector('#card');
     var cardElement = cardTemplate.content.cloneNode(true);
     cardElement.querySelector('.popup__avatar').src =
     ad.author.avatar;
@@ -101,7 +102,6 @@
 
   // Вставляет карточку объявления перед элементом фильтрации объявлений
   var showCardHousing = function (card) {
-    var adsFilter = document.querySelector('.map__filters-container');
     map.insertBefore(card, adsFilter);
   };
 

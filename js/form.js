@@ -161,11 +161,11 @@
   var buttonResetAdForm = adForm.querySelector('.ad-form__reset');
 
   var sendDataSuccess = function (status) {
-    window.messages.generatesMessageNode(status);
+    window.messages.generateMessageNode(status);
   };
 
   var sendDataError = function (status) {
-    window.messages.generatesMessageNode(status);
+    window.messages.generateMessageNode(status);
   };
 
   var onButtonAdFormSubmitClick = function (evt) {
