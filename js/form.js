@@ -69,14 +69,14 @@
   };
 
   var configureCapacity = function () {
-    for (var i = 0; i < optionsCapacityAdForm.length; i++) {
-      optionsCapacityAdForm[i].disabled = true;
+    optionsCapacityAdForm.forEach(function (element) {
+      element.disabled = true;
 
-      if (optionsCapacityAdForm[i].value === DEFAULT_NUMBER_GUESTS) {
-        optionsCapacityAdForm[i].selected = true;
-        optionsCapacityAdForm[i].disabled = false;
+      if (element.value === DEFAULT_NUMBER_GUESTS) {
+        element.selected = true;
+        element.disabled = false;
       }
-    }
+    });
   };
 
   // Изменяет минимальное значение и placeholder у инпута "Цена за ночь"
@@ -94,11 +94,11 @@
   // Получает объект с элементами сортированными в порядке возрастания по их соотношению со значениями в атрибутах
   var getObjectOptionsCapacity = function () {
     var objectCapacity = {};
-    for (var i = 0; i < optionsCapacityAdForm.length; i++) {
-      var currentValue = optionsCapacityAdForm[i];
+    optionsCapacityAdForm.forEach(function (element) {
+      var currentValue = element;
       var currentKey = currentValue.value;
       objectCapacity[currentKey] = currentValue;
-    }
+    });
     return objectCapacity;
   };
   var optionsCapacity = getObjectOptionsCapacity();
@@ -113,9 +113,9 @@
 
   // Добавляет состояние disabled пунктам, которые не соответствуют выбранному количеству комнат
   var setStateInputNumberPlaces = function (evt) {
-    for (var i = 0; i < optionsCapacityAdForm.length; i++) {
-      optionsCapacityAdForm[i].disabled = true;
-    }
+    optionsCapacityAdForm.forEach(function (element) {
+      element.disabled = true;
+    });
 
     var valueCapacity = evt.target.value;
 
@@ -131,9 +131,9 @@
 
   // Меняет состояние атрибута disabled у коллекции элементов
   var setStateElementsForm = function (elements, state) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].disabled = state;
-    }
+    elements.forEach(function (element) {
+      element.disabled = state;
+    });
   };
 
   // Инициализация начального состояния формы
