@@ -150,6 +150,7 @@
     adForm.removeEventListener('submit', onButtonAdFormSubmitClick);
     selectTimeoutAdForm.removeEventListener('change', onTimeAdChange);
     selectTimeinAdForm.removeEventListener('change', onTimeAdChange);
+    window.pins.removeHandlerFormFilters();
   };
 
   // Устанавливает дефолтное состояние всех элементов страницы при клике на кнопку "Очистить" в форме AdForm

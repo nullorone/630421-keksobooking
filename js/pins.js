@@ -56,13 +56,16 @@
   var formFilters = document.querySelector('.map__filters');
   var formFiltersItems = formFilters.querySelectorAll('select, input');
   var mapPins = document.querySelector('.map__pins');
+  var formFiltersData;
+
+  var onFormFiltersChange = function () {
+    window.filters.updatePins(formFiltersData);
+  };
 
   // Отрисовка пинов на карте
   var showSimilarPins = function (dataHousing) {
-    formFilters.addEventListener('change', function () {
-      window.filters.updatePins(dataHousing);
-    });
-
+    formFiltersData = dataHousing.slice();
+    formFilters.addEventListener('change', onFormFiltersChange);
     mapPins.appendChild(generateSimilarPins(dataHousing));
   };
 
@@ -90,8 +93,13 @@
     }
   };
 
+  var removeHandlerFormFilters = function () {
+    formFilters.removeEventListener('change', onFormFiltersChange);
+  };
+
   window.pins = {
     renderPins: renderPins,
-    generateSimilarPins: generateSimilarPins
+    generateSimilarPins: generateSimilarPins,
+    removeHandlerFormFilters: removeHandlerFormFilters
   };
 })();
