@@ -22,17 +22,17 @@
       } else if (mainNodeElement.lastElementChild.className === 'error') {
         mainNodeElement.removeChild(mainNodeElement.lastElementChild);
       }
+      mainNodeElement.removeEventListener('click', onMainNodeElementClick);
+      mainNodeElement.removeEventListener('keydown', onMessageNodeKeydownEsc);
     };
 
     var onMainNodeElementClick = function () {
       removeMessageNode();
-      mainNodeElement.removeEventListener('click', onMainNodeElementClick);
     };
 
     var onMessageNodeKeydownEsc = function (evt) {
       if (evt.keyCode === ESC_KEYCODE) {
         removeMessageNode();
-        mainNodeElement.removeEventListener('keydown', onMessageNodeKeydownEsc);
       }
     };
 
