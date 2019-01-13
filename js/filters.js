@@ -14,7 +14,7 @@
   var filterPrice = document.querySelector('#housing-price');
   var filterGuests = document.querySelector('#housing-guests');
   var filterFeaturesNodeList = document.querySelectorAll('#housing-features input');
-  var filterArray = Array.from(filterFeaturesNodeList);
+  var filters = Array.from(filterFeaturesNodeList);
 
   var typeHousingChange = function (ad) {
     return ad.offer.type === filterType.value || filterType.value === 'any';
@@ -38,12 +38,12 @@
   };
 
   var featuresHousingChange = function (ad) {
-    var filterFeatures = filterArray.filter(function (element) {
-      return element.checked;
+    var checkedFeatures = filters.filter(function (filter) {
+      return filter.checked;
     });
-    return filterFeatures.length === 0 || filterFeatures.every(function (item) {
-      return ad.offer.features.find(function (currentElement) {
-        return item.value === currentElement;
+    return checkedFeatures.length === 0 || checkedFeatures.every(function (checkedFeature) {
+      return ad.offer.features.find(function (adFeature) {
+        return checkedFeature.value === adFeature;
       });
     });
   };

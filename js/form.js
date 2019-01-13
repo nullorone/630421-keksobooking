@@ -69,12 +69,12 @@
   };
 
   var configureCapacity = function () {
-    optionsCapacityAdForm.forEach(function (element) {
-      element.disabled = true;
+    optionsCapacityAdForm.forEach(function (option) {
+      option.disabled = true;
 
-      if (element.value === DEFAULT_NUMBER_GUESTS) {
-        element.selected = true;
-        element.disabled = false;
+      if (option.value === DEFAULT_NUMBER_GUESTS) {
+        option.selected = true;
+        option.disabled = false;
       }
     });
   };
@@ -94,10 +94,8 @@
   // Получает объект с элементами сортированными в порядке возрастания по их соотношению со значениями в атрибутах
   var getObjectOptionsCapacity = function () {
     var objectCapacity = {};
-    optionsCapacityAdForm.forEach(function (element) {
-      var currentValue = element;
-      var currentKey = currentValue.value;
-      objectCapacity[currentKey] = currentValue;
+    optionsCapacityAdForm.forEach(function (option) {
+      objectCapacity[option.value] = option;
     });
     return objectCapacity;
   };
@@ -113,8 +111,8 @@
 
   // Добавляет состояние disabled пунктам, которые не соответствуют выбранному количеству комнат
   var setStateInputNumberPlaces = function (evt) {
-    optionsCapacityAdForm.forEach(function (element) {
-      element.disabled = true;
+    optionsCapacityAdForm.forEach(function (option) {
+      option.disabled = true;
     });
 
     var valueCapacity = evt.target.value;
