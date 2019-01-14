@@ -5,7 +5,7 @@
 
   var mapPinMain = document.querySelector('.map__pin--main');
   var formFilters = document.querySelector('.map__filters');
-  var formFiltersItems = formFilters.querySelectorAll('select, input');
+  var formFiltersNodeList = formFilters.querySelectorAll('select, input');
   var mapPins = document.querySelector('.map__pins');
   var formFiltersAds;
 
@@ -48,9 +48,9 @@
         }
       }
     } else if (ads.length <= MAX_ADS) {
-      ads.forEach(function (element) {
-        if (element.offer) {
-          fragment.appendChild(createPin(element));
+      ads.forEach(function (ad) {
+        if (ad.offer) {
+          fragment.appendChild(createPin(ad));
         }
       });
     }
@@ -71,8 +71,8 @@
   var getAdsSuccess = function (loadedAds) {
     var ads = loadedAds;
     showSimilarPins(ads);
-    formFiltersItems.forEach(function (element) {
-      element.disabled = 0;
+    formFiltersNodeList.forEach(function (node) {
+      node.disabled = 0;
     });
   };
 
@@ -81,8 +81,8 @@
   };
 
   var getAds = function () {
-    formFiltersItems.forEach(function (element) {
-      element.disabled = 1;
+    formFiltersNodeList.forEach(function (node) {
+      node.disabled = 1;
     });
     window.backend.load(getAdsSuccess, getAdsError);
   };

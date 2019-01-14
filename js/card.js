@@ -22,8 +22,8 @@
   // Генерирует список преимуществ жилья
   var generateFeaturesList = function (ad) {
     var featuresList = [];
-    ad.offer.features.forEach(function (element) {
-      featuresList.push('<li class="popup__feature popup__feature--' + element + '"></li>');
+    ad.offer.features.forEach(function (adFeature) {
+      featuresList.push('<li class="popup__feature popup__feature--' + adFeature + '"></li>');
     });
     return featuresList;
   };
@@ -39,8 +39,8 @@
   // Генерирует фотографии жилья
   var generatePhotoList = function (ad) {
     var photoList = [];
-    ad.offer.photos.forEach(function (element) {
-      photoList.push('<img src="' + element + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
+    ad.offer.photos.forEach(function (adPhoto) {
+      photoList.push('<img src="' + adPhoto + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">');
     });
     return photoList;
   };
@@ -54,12 +54,12 @@
   };
 
   // Скрывает айтемы карточки, если в них не хватает информации
-  var getFilteredElement = function (element) {
-    var descriptionsElement = ['avatar', 'title', 'address', 'price', 'type', 'features', 'description', 'photos'];
-    descriptionsElement.forEach(function (currentElement) {
-      var item = element.querySelector('[class*=' + currentElement + ']');
-      if (item.children.length === 0 && item.innerText === false) {
-        item.hidden = true;
+  var hideEmptyDescription = function (card) {
+    var cardDescriptions = ['avatar', 'title', 'address', 'price', 'type', 'features', 'description', 'photos'];
+    cardDescriptions.forEach(function (description) {
+      var cardElement = card.querySelector('[class*=' + description + ']');
+      if (cardElement.children.length === 0 && cardElement.innerText === false) {
+        cardElement.hidden = true;
       }
     });
   };
@@ -94,7 +94,7 @@
     var popupPhotos = cardElement.querySelector('.popup__photos');
     popupPhotos.innerHTML = ' ';
     includePhotoList(generatePhotoList(ad), popupPhotos);
-    getFilteredElement(cardElement);
+    hideEmptyDescription(cardElement);
     return cardElement;
   };
 

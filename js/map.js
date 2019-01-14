@@ -12,10 +12,7 @@
     map.classList.add('map--faded');
     mapPinMain.style.left = defaultPositionPinMain.defaultX + 'px';
     mapPinMain.style.top = defaultPositionPinMain.defaultY + 'px';
-    var mapCard = map.querySelector('.map__card');
-    if (mapCard) {
-      mapCard.remove();
-    }
+    window.card.removeCard();
     while (mapPinMain.nextElementSibling) {
       mapPinMain.nextElementSibling.remove();
     }
