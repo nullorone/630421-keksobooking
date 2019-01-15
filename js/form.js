@@ -140,6 +140,8 @@
     adForm.removeEventListener('submit', onButtonAdFormSubmitClick);
     selectTimeoutAdForm.removeEventListener('change', onTimeAdChange);
     selectTimeinAdForm.removeEventListener('change', onTimeAdChange);
+    window.previewFiles.removeUploadFilesHandler();
+    window.previewFiles.removeUploadFiles();
     window.pins.removeHandlerFormFilters();
   };
 
@@ -173,6 +175,7 @@
     selectRoomNumberAdForm.addEventListener('change', onInputRoomNumberChange);
     buttonResetAdForm.addEventListener('click', onButtonResetClick);
     adForm.addEventListener('submit', onButtonAdFormSubmitClick);
+    window.previewFiles.addUploadFilesHandler();
   };
 
   window.form = {
