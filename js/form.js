@@ -80,15 +80,11 @@
   };
 
   // Изменяет минимальное значение и placeholder у инпута "Цена за ночь"
-  var changePriceNight = function (evt) {
+  var onInputTypeHousingChange = function (evt) {
     var valueTypeHousing = evt.target.value;
     valueTypeHousing = valueTypeHousing.toUpperCase();
     inputPriceAdForm.min = PriceHousing[valueTypeHousing];
     inputPriceAdForm.placeholder = PriceHousing[valueTypeHousing];
-  };
-
-  var onInputTypeHousingChange = function (evt) {
-    changePriceNight(evt);
   };
 
   // Получает объект с элементами сортированными в порядке возрастания по их соотношению со значениями в атрибутах
@@ -110,7 +106,7 @@
   };
 
   // Добавляет состояние disabled пунктам, которые не соответствуют выбранному количеству комнат
-  var setStateInputNumberPlaces = function (evt) {
+  var onInputRoomNumberChange = function (evt) {
     optionsCapacityAdForm.forEach(function (option) {
       option.disabled = true;
     });
@@ -121,10 +117,6 @@
       place.selected = true;
       place.disabled = false;
     });
-  };
-
-  var onInputRoomNumberChange = function (evt) {
-    setStateInputNumberPlaces(evt);
   };
 
   // Меняет состояние атрибута disabled у коллекции элементов
