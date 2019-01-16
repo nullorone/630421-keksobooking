@@ -30,9 +30,9 @@
 
   // Вставляет сгенерированный массив преимуществ в разметку
   var includeFeaturesList = function (featuresList, popupFeatures) {
-    for (var i = featuresList.length - 1; i >= 0; i--) {
-      popupFeatures.insertAdjacentHTML('afterbegin', featuresList[i]);
-    }
+    featuresList.forEach(function (feature) {
+      popupFeatures.insertAdjacentHTML('beforebegin', feature);
+    });
     return popupFeatures;
   };
 
@@ -47,9 +47,9 @@
 
   // Вставляет сгенерированный массив фотографий жилья в разметку
   var includePhotoList = function (photoList, popupPhotos) {
-    for (var i = photoList.length - 1; i >= 0; i--) {
-      popupPhotos.insertAdjacentHTML('afterbegin', photoList[i]);
-    }
+    photoList.forEach(function (photo) {
+      popupPhotos.insertAdjacentHTML('beforebegin', photo);
+    });
     return popupPhotos;
   };
 
